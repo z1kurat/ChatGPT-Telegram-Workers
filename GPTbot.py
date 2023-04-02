@@ -17,12 +17,12 @@ from aiogram.utils.executor import start_webhook
 
 
 async def on_startup(dispatcher):
-    await database.connection()
+    database.connection()
     await bot.set_webhook(WEBHOOK_URL_BASE + WEBHOOK_URL_PATH, WEBHOOK_SSL_CERT, WEBHOOK_HOST, 40, drop_pending_updates=True)
 
 
 async def on_shutdown(dispatcher):
-    await database.disconnect()
+    database.disconnect()
     await bot.delete_webhook()
 
 
