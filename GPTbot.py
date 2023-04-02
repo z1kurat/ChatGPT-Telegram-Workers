@@ -2,16 +2,41 @@ import openai
 
 import Config
 
-from telegram import Bot
-from telegram import Update
-from telegram.ext import Updater
-from telegram.ext import MessageHandler
-from telegram.ext import Filters
+import telebot
+import cherrypy
 
 
-def message_handler(bot: Bot, update: Update):
+class WebhookServer(object):
+    @cherrypy.expose
+    def index(self):
+        if 'content-length' in cherrypy.request.headers and \
+                'content-type' in cherrypy.request.headers and \
+                cherrypy.request.headers['content-type'] == 'application/json':
+            length = int(cherrypy.request.headers['content-length'])
+            json_string = cherrypy.request.body.read(length).decode("utf-8")
+            update = telebot.types.Update.de_json(json_string)
+            bot.process_new_updates([update])
+            return ''
+        else:
+            raise cherrypy.HTTPError(403)
+
+
+user_history = {'id': 0, 'history': []}
+
+openai.api_key = Config.OPENAI_KEY
+
+bot = telebot.TeleBot(Config.TELEGRAM_BOT_TOKEN)
+
+
+@bot.message_handler(commands=['start'])
+def get_start(message):
+    bot.send_message(message.chat.id, "Привет, я умнее тебя!")
+
+
+@bot.message_handler(func=lambda message: True, content_types=['text'])
+def echo_message(message):
     print("-----Gotcha-----")
-    message = update.effective_message
+    message = message.text
 
     chat_id = message.chat.id
 
@@ -22,7 +47,8 @@ def message_handler(bot: Bot, update: Update):
     user_history.setdefault(chat_id, [])
 
     messages = user_history[chat_id]
-    messages.append({"role": "system", "content": "You are a kind and helpful assistant who gives detailed and useful answers"})
+    messages.append(
+        {"role": "system", "content": "You are a kind and helpful assistant who gives detailed and useful answers"})
     messages.append({"role": "user", "content": message.text})
 
     user_history[chat_id].append({"role": "user", "content": message.text})
@@ -39,32 +65,28 @@ def message_handler(bot: Bot, update: Update):
             n=1
         )
 
-        bot.send_message(chat_id=update.effective_message.chat_id, text=completion.choices[0].message.content)
+        bot.reply_to(chat_id, completion.choices[0].message.content)
         print(f"send: {completion.choices[0].message.content}")
 
         user_history[chat_id].append({"role": "assistant", "content": completion.choices[0].message.content})
 
     except:
-        bot.send_message(chat_id=update.effective_message.chat_id, text="Ты дурка? Я думаю, что да!")
+        bot.reply_to(chat_id, "Ты дурка? Я думаю, что да!")
 
     print("----------------\n")
 
 
-def main():
-    global user_history
-    user_history = {'id': 0, 'history': []}
+bot.remove_webhook()
 
-    openai.api_key = Config.OPENAI_KEY
+bot.set_webhook(url=Config.WEBHOOK_URL_BASE + Config.WEBHOOK_URL_PATH,
+                certificate=open(Config.WEBHOOK_SSL_CERT, 'r'))
 
-    bot = Bot(token=Config.TELEGRAM_BOT_TOKEN)
-    updater = Updater(bot=bot)
+cherrypy.config.update({
+    'server.socket_host': Config.WEBHOOK_LISTEN,
+    'server.socket_port': Config.WEBHOOK_PORT,
+    'server.ssl_module': 'builtin',
+    'server.ssl_certificate': Config.WEBHOOK_SSL_CERT,
+    'server.ssl_private_key': Config.WEBHOOK_SSL_PRIV
+})
 
-    handler = MessageHandler(Filters.all, message_handler)
-    updater.dispatcher.add_handler(handler)
-
-    updater.start_polling()
-    updater.idle()
-
-
-if __name__ == '__main__':
-    main()
+cherrypy.quickstart(WebhookServer(), Config.WEBHOOK_URL_PATH, {'/': {}})
