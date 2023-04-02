@@ -17,7 +17,7 @@ WEBHOOK_SSL_PRIV = './cert/webhook_pkey.pem'
 WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/%s/" % TELEGRAM_BOT_TOKEN
 
-DB_URL = "mysql+pymysql://root@localhost/bot"
+DB_URL = "postgresql+asyncpg://root@localhost/bot"
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
 dp = Dispatcher(bot)
 
