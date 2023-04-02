@@ -1,5 +1,7 @@
 import openai
 
+import Config
+
 from telegram import Bot
 from telegram import Update
 from telegram.ext import Updater
@@ -52,9 +54,9 @@ def main():
     global user_history
     user_history = {'id': 0, 'history': []}
 
-    openai.api_key = "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"
+    openai.api_key = Config.OPENAI_KEY
 
-    bot = Bot(token='5853486557:AAHnqhu_7CqePUhU29S27AhrrHVZqiC0MBI')
+    bot = Bot(token=Config.TELEGRAM_BOT_TOKEN)
     updater = Updater(bot=bot)
 
     handler = MessageHandler(Filters.all, message_handler)
