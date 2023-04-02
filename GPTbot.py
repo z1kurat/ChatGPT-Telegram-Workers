@@ -26,11 +26,6 @@ async def on_shutdown(dispatcher):
     await bot.delete_webhook()
 
 
-@dp.message_handler()
-async def echo(message: types.Message):
-    await message.answer(message.text)
-
-
 async def save(user_id, text):
     await database.execute(f"INSERT INTO messages(telegram_id, text) "
                            f"VALUES (:telegram_id, :text)", values={'telegram_id': user_id, 'text': text})
