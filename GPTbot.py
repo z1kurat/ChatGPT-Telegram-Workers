@@ -18,7 +18,7 @@ from aiogram.utils.executor import start_webhook
 
 async def on_startup(dispatcher):
     #database.connection()
-    await bot.set_webhook(WEBHOOK_HOST, drop_pending_updates=True)
+    await bot.set_webhook(WEBHOOK_HOST, certificate=WEBHOOK_SSL_CERT, drop_pending_updates=True)
 
 
 async def on_shutdown(dispatcher):
