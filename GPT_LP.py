@@ -57,7 +57,7 @@ async def gpt(message: types.Message):
 
 
 async def main():
-    await dp.start_polling(bot)
+    await dp.start_polling(bot, limit=5)
 
 
 if __name__ == "__main__":
