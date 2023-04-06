@@ -2,7 +2,8 @@ import asyncio
 
 import logging
 
-import openai
+import openai_async
+
 from aiogram import Bot, Dispatcher, types
 from aiogram.dispatcher.filters import Command
 
@@ -12,7 +13,6 @@ from Config import OPENAI_KEY
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
 dp = Dispatcher(bot)
-openai.api_key = OPENAI_KEY
 
 
 @dp.message_handler(Command("start"))
@@ -35,15 +35,20 @@ async def gpt(message: types.Message):
         {"role": "user", "content": message_text}]
 
     try:
-        completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=messages,
-            temperature=0.7,
-            n=1
+        completion = await openai_async.chat_complete(
+            OPENAI_KEY,
+            timeout=30,
+            payload={
+                "model": "gpt-3.5-turbo",
+                "messages": messages,
+                "temperature": 0.7,
+                "n": 1
+            }
         )
 
-        await bot.send_message(chat_id, completion.choices[0].message.content)
-        print(f"send: {completion.choices[0].message.content}")
+        anwser = completion.json()["choices"][0]["message"]["content"]
+        await bot.send_message(chat_id, anwser)
+        print(f"send: { anwser }")
 
     except Exception as err:
         await bot.send_message(chat_id, f"В данный момент невохможно обработать Ваш запрос. \n {err.args}")
