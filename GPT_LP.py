@@ -37,7 +37,7 @@ async def gpt(message: types.Message):
     try:
         completion = await openai_async.chat_complete(
             OPENAI_KEY,
-            timeout=30,
+            timeout=125,
             payload={
                 "model": "gpt-3.5-turbo",
                 "messages": messages,
@@ -51,13 +51,14 @@ async def gpt(message: types.Message):
         print(f"send: { anwser }")
 
     except Exception as err:
+        print(f"В данный момент невохможно обработать Ваш запрос. \n {err.args}")
         await bot.send_message(chat_id, f"В данный момент невохможно обработать Ваш запрос. \n {err.args}")
 
     print("----------------\n")
 
 
 async def main():
-    await dp.start_polling(bot, limit=5)
+    await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
