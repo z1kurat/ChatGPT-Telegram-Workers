@@ -36,9 +36,10 @@ async def save_message_history(user_id, text, db):
 async def create_if_not_exists_message_history(user_id, db):
     cur = await db.cursor()
 
-    await cur.execute(f"CREATE TABLE IF NOT EXISTS MessageHistory{user_id} (:"
+    await cur.execute(f"CREATE TABLE IF NOT EXISTS MessageHistory{user_id} ("
                       f"ID INT PRIMARY KEY AUTO_INCREMENT,"
                       f"ID_USER INT NOT NULL,"
-                      f"message VARCHAR(1024);")
+                      f"message VARCHAR(1024),"
+                      f"FOREIGN KEY (ID_USER) REFERENCES User(ID));")
 
     await cur.close()
