@@ -7,23 +7,20 @@ from Configs.DB_PARAMETERS import NAME_DB
 import aiomysql
 
 
-async def set_sql_connect():
-    return await aiomysql.connect(host=HOST, port=PORT, user=USER, password=PASSWORD, db=NAME_DB)
+async def set_sql_connect(loop):
+    return await aiomysql.connect(host=HOST, port=PORT, user=USER, password=PASSWORD, db=NAME_DB, loop=loop)
 
 
 async def read_message_history(user_id, db):
-    cur = await db.cursor()
+    async with db.cursor() as cur:
+        await cur.execute(f'SELECT message '
+                          f'FROM MessageHistory{user_id} '
+                          f'WHERE ID_USER = :user_id ',
+                          values={'user_id': user_id})
 
-    await cur.execute(f'SELECT message '
-                      f'FROM MessageHistory{user_id} '
-                      f'WHERE ID_USER = :user_id ',
-                      values={'user_id': user_id})
+        results = await cur.fetchall()
 
-    results = await cur.fetchall()
-
-    await cur.close()
-
-    return [next(result.values()) for result in results]
+        return [next(result.values()) for result in results]
 
 
 async def save_message_history(user_id, text, db):
