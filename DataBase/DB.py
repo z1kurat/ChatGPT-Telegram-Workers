@@ -27,13 +27,13 @@ async def read_message_history(user_id, db):
 async def save_message_history(user_id, text, db):
     async with db.cursor() as cur:
         await cur.execute(f"INSERT INTO MessageHistory{user_id} "
-                          f"VALUES (:ID_USER, :message)", values={'ID_USER': user_id, 'message': text})
+                          f"VALUES ({user_id}, {text})")
 
 
 async def del_old_message(user_id, db):
     async with db.cursor() as cur:
         await cur.execute(f"DELETE FROM MessageHistory{user_id} WHERE ID NOT IN ("
-                          "SELECT ID FROM MessageHistory{user_id} order by ID desc limit {MAX_SAVE_MESSAGE_HISTORY})")
+                          f"SELECT ID FROM MessageHistory{user_id} order by ID desc limit {MAX_SAVE_MESSAGE_HISTORY})")
 
 
 async def create_if_not_exists_message_history(user_id, db):
