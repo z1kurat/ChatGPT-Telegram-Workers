@@ -8,6 +8,8 @@ from Configs.GPT_Setting import MAX_SAVE_MESSAGE_HISTORY
 
 import aiomysql
 
+import json
+
 
 async def set_sql_connect():
     return await aiomysql.connect(host=HOST, port=PORT, user=USER, password=PASSWORD, db=NAME_DB)
@@ -20,7 +22,7 @@ async def read_message_history(user_id, db):
                           f'WHERE ID_USER = {user_id};')
 
         results = await cur.fetchall()
-        return [result[0] for result in results]
+        return [json.loads(result[0]) for result in results]
 
 
 async def save_message_history(user_id, text, db):
