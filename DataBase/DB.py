@@ -8,8 +8,6 @@ from Configs.GPT_Setting import MAX_SAVE_MESSAGE_HISTORY
 
 import aiomysql
 
-import json
-
 
 async def set_sql_connect():
     return await aiomysql.connect(host=HOST, port=PORT, user=USER, password=PASSWORD, db=NAME_DB)
