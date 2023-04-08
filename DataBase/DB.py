@@ -27,7 +27,7 @@ async def read_message_history(user_id, db):
 async def save_message_history(user_id, text, db):
     async with db.cursor() as cur:
         await cur.execute(f"INSERT INTO MessageHistory{user_id} "
-                          f"VALUES ({user_id}, {text})")
+                          f"VALUES ({user_id}, \"{text}\")")
 
 
 async def del_old_message(user_id, db):
