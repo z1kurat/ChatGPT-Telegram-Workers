@@ -8,7 +8,8 @@ from Configs.API import TELEGRAM_BOT_TOKEN
 
 from DataBase import DB
 
-db = asyncio.get_event_loop().run_until_complete(DB.set_sql_connect())
+loop = asyncio.get_event_loop()
+db = loop.run_until_complete(DB.set_sql_connect())
 
 logging.basicConfig(level=logging.INFO)
 
