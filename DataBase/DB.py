@@ -20,13 +20,14 @@ async def read_message_history(user_id, db):
                           f'WHERE ID_USER = {user_id};')
 
         results = await cur.fetchall()
-        return [next(result) for result in results]
+        return [result for result in results]
 
 
 async def save_message_history(user_id, text, db):
     async with db.cursor() as cur:
         await cur.execute(f"INSERT INTO MessageHistory{user_id} (ID_USER, message)"
                           f"VALUES ({user_id}, \"{text}\");")
+    await db.commit()
 
 
 async def del_old_message(user_id, db):
@@ -36,6 +37,7 @@ async def del_old_message(user_id, db):
 
         if result > MAX_SAVE_MESSAGE_HISTORY:
             await cur.execute(f"DELETE TOP (2) FROM MessageHistory{user_id}")
+    await db.commit()
 
 
 async def create_if_not_exists_message_history(user_id, db):
@@ -44,3 +46,4 @@ async def create_if_not_exists_message_history(user_id, db):
                           f"ID INT PRIMARY KEY AUTO_INCREMENT,"
                           f"ID_USER INT NOT NULL,"
                           f"message VARCHAR(1024));")
+    await db.commit()
