@@ -14,10 +14,10 @@ async def set_sql_connect():
 async def read_message_history(user_id, db):
     cur = await db.cursor()
 
-    results = await cur.fetch_all('SELECT message '
-                                  f'FROM MessageHistory{user_id} '
-                                  'WHERE ID_USER = :user_id ',
-                                  values={'user_id': user_id})
+    results = await cur.execute(f'SELECT message '
+                                f'FROM MessageHistory{user_id} '
+                                f'WHERE ID_USER = :user_id ',
+                                values={'user_id': user_id})
 
     await cur.close()
 
