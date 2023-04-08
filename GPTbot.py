@@ -5,8 +5,6 @@ import Command
 from SetupBot.Setup import dp
 from SetupBot.Setup import bot
 
-import Keyboards
-
 
 async def main():
     Command.Start.register_handlers(dp)

@@ -1,10 +1,16 @@
-from aiogram.dispatcher.filters import Command
 from aiogram import types
 from aiogram import Dispatcher
 
+from Configs.Template_Responses import START_MESSAGE
+
+from DataBase import DB
+
+from SetupBot.Setup import db_conn
+
 
 async def cmd_start(message: types.Message):
-    await message.answer("Hello!")
+    await DB.create_if_not_exists_message_history(message.from_user.id, db_conn)
+    await message.answer(START_MESSAGE)
 
 
 def register_handlers(dp: Dispatcher):
