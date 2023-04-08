@@ -20,7 +20,7 @@ async def read_message_history(user_id, db):
                           f'WHERE ID_USER = {user_id};')
 
         results = await cur.fetchall()
-        return [result for result in results]
+        return [result[0] for result in results]
 
 
 async def save_message_history(user_id, text, db):
