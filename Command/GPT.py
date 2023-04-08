@@ -33,6 +33,8 @@ async def cmd_gpt(message: types.Message):
     user_messages.append({"role": "user", "content": message_text})
 
     try:
+        print(user_messages)
+
         completion = await openai_async.chat_complete(
             OPENAI_KEY,
             timeout=TIME_OUT,
