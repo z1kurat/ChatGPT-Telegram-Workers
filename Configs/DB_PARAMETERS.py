@@ -1,5 +1,5 @@
-HOST = '1374385-co9085.tw1.ru'
+HOST = '127.0.0.1'
 PORT = 3306
-USER = 'root@localhost'
-PASSWORD = ''
+USER = 'root'
+PASSWORD = 'root'
 NAME_DB = 'BOT'
