@@ -32,8 +32,11 @@ async def save_message_history(user_id, text, db):
 
 async def del_old_message(user_id, db):
     async with db.cursor() as cur:
-        await cur.execute(f"DELETE FROM MessageHistory{user_id} WHERE ID NOT IN ("
-                          f"SELECT ID FROM MessageHistory{user_id} order by ID desc limit {MAX_SAVE_MESSAGE_HISTORY})")
+        await cur.execute(f"SELECT count(*) FROM MessageHistory{user_id}")
+        result = await cur.fetchone()
+
+        if result > 10:
+            await cur.execute(f"DELETE TOP (2) FROM MessageHistory{user_id}")
 
 
 async def create_if_not_exists_message_history(user_id, db):
