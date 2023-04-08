@@ -1,18 +1,6 @@
-from Configs.DB_PARAMETERS import HOST
-from Configs.DB_PARAMETERS import USER
-from Configs.DB_PARAMETERS import PORT
-from Configs.DB_PARAMETERS import PASSWORD
-from Configs.DB_PARAMETERS import NAME_DB
-
 from Configs.GPT_Setting import MAX_SAVE_MESSAGE_HISTORY
 
 from SetupBot.Setup import db
-
-import aiomysql
-
-
-async def set_sql_connect():
-    return None
 
 
 async def read_message_history(user_id):

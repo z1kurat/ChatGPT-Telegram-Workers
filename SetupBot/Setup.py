@@ -16,7 +16,12 @@ from Configs.DB_PARAMETERS import NAME_DB
 
 
 loop = asyncio.get_event_loop()
-db = loop.run_until_complete(await aiomysql.connect(host=HOST, port=PORT, user=USER, password=PASSWORD, db=NAME_DB))
+
+db = loop.run_until_complete(aiomysql.connect(host=HOST,
+                                              port=PORT,
+                                              user=USER,
+                                              password=PASSWORD,
+                                              db=NAME_DB))
 
 logging.basicConfig(level=logging.INFO)
 
