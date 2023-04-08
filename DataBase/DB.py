@@ -20,7 +20,7 @@ async def read_message_history(user_id, db):
                           f'WHERE ID_USER = {user_id};')
 
         results = await cur.fetchall()
-
+        print(results)
         return [next(result.values()) for result in results]
 
 
