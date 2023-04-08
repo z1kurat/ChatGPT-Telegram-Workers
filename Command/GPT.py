@@ -5,7 +5,7 @@ import openai_async
 
 from DataBase import DB
 
-from SetupBot.Setup import db_conn
+from SetupBot.Setup import db
 
 from Configs.API import OPENAI_KEY
 from Configs.Template_Responses import ERROR_RESPONSE_MESSAGE
@@ -27,10 +27,10 @@ async def cmd_gpt(message: types.Message):
     print(f"message: {message_text}")
     print(f"id: {chat_id}")
 
-    user_messages = DB.read_message_history(chat_id, db_conn)
+    user_messages = await DB.read_message_history(chat_id, db)
 
-    user_messages.update({"role": "system", "content": DEFAULT_MOD})
-    user_messages.update({"role": "user", "content": message_text})
+    user_messages.append({"role": "system", "content": DEFAULT_MOD})
+    user_messages.append({"role": "user", "content": message_text})
 
     try:
         completion = await openai_async.chat_complete(
