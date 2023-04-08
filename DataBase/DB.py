@@ -26,8 +26,11 @@ async def read_message_history(user_id, db):
 
 async def save_message_history(user_id, role, content, db):
     async with db.cursor() as cur:
+        role_sql_format = "".join("`" + str(role) + "`")
+        content_sql_format = "".join("`" + str(content) + "`")
+
         await cur.execute(f"INSERT INTO MessageHistory{user_id} (PR_ROLE, CONTENT)"
-                          f"VALUES ({str(role)}, {str(content)});")
+                          f"VALUES ({role_sql_format}, {content_sql_format});")
     await db.commit()
 
 
