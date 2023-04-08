@@ -21,13 +21,13 @@ import Keyboards
 async def cmd_gpt(message: types.Message):
     print("-----Gotcha-----")
     message_text = message.text
-    chat_id = message.from_user.id
+    user_id = message.from_user.id
 
     print(f"User: {message.chat.first_name}")
     print(f"message: {message_text}")
-    print(f"id: {chat_id}")
+    print(f"id: {user_id}")
 
-    user_messages = await DB.read_message_history(chat_id, db)
+    user_messages = await DB.read_message_history(user_id, db)
 
     user_messages.append({"role": "system", "content": DEFAULT_MOD})
     user_messages.append({"role": "user", "content": message_text})
@@ -49,6 +49,11 @@ async def cmd_gpt(message: types.Message):
         content = completion.json()["choices"][0]["message"]["content"]
         await message.answer(content, reply_markup=Keyboards.reset_context_keyboard)
         print(f"send: {content}")
+
+        await DB.save_message_history(user_id, {"role": "user", "content": message_text}, db)
+        await DB.save_message_history(user_id, {"role": "assistant", "content": content}, db)
+
+        await DB.del_old_message(user_id, db)
 
     except Exception as err:
         print(err.args)
