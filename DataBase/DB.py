@@ -19,7 +19,7 @@ async def read_message_history(user_id, db):
                           f'FROM MessageHistory{user_id};')
 
         results = await cur.fetchall()
-        return [{"role": result[0], "content": result[1]} for result in results]
+        return [{"role": str(result[0]), "content": str(result[1])} for result in results]
 
 
 async def save_message_history(user_id, role, content, db):
