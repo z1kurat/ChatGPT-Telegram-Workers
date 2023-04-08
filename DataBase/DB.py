@@ -19,7 +19,8 @@ async def read_message_history(user_id, db):
                           f'FROM MessageHistory{user_id};')
 
         results = await cur.fetchall()
-        return [{"role": str(result[0]), "content": str(result[1])} for result in results]
+        print(results)
+        return [{"role": result[0], "content": result[1]} for result in results]
 
 
 async def save_message_history(user_id, role, content, db):
@@ -30,6 +31,7 @@ async def save_message_history(user_id, role, content, db):
         await cur.execute(f"INSERT INTO MessageHistory{user_id} (PR_ROLE, CONTENT)"
                           f"VALUES ({role_sql_format}, {content_sql_format});")
     await db.commit()
+    print("asdas")
 
 
 async def del_old_message(user_id, db):
@@ -40,6 +42,7 @@ async def del_old_message(user_id, db):
         if result > MAX_SAVE_MESSAGE_HISTORY:
             await cur.execute(f"DELETE TOP (2) FROM MessageHistory{user_id}")
     await db.commit()
+    print("zxczxc")
 
 
 async def create_if_not_exists_message_history(user_id, db):
