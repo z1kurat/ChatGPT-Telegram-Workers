@@ -1,5 +1,3 @@
-import asyncio
-
 import Command
 
 from SetupBot.Setup import loop

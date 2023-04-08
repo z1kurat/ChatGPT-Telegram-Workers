@@ -5,8 +5,6 @@ import openai_async
 
 from DataBase import DB
 
-from SetupBot.Setup import db
-
 from Configs.API import OPENAI_KEY
 from Configs.Template_Responses import ERROR_RESPONSE_MESSAGE
 from Configs.GPT_Setting import DEFAULT_MOD
@@ -27,7 +25,7 @@ async def cmd_gpt(message: types.Message):
     print(f"message: {message_text}")
     print(f"id: {user_id}")
 
-    user_messages = await DB.read_message_history(user_id, db)
+    user_messages = await DB.read_message_history(user_id)
 
     user_messages.append({"role": "system", "content": DEFAULT_MOD})
     user_messages.append({"role": "user", "content": message_text})
@@ -50,10 +48,10 @@ async def cmd_gpt(message: types.Message):
         await message.answer(content, reply_markup=Keyboards.reset_context_keyboard)
         print(f"send: {content}")
 
-        await DB.save_message_history(user_id, "user", message_text, db)
-        await DB.save_message_history(user_id, "assistant", content, db)
+        await DB.save_message_history(user_id, "user", message_text)
+        await DB.save_message_history(user_id, "assistant", content)
 
-        await DB.del_old_message(user_id, db)
+        await DB.del_old_message(user_id)
 
     except Exception as err:
         print(err.args)

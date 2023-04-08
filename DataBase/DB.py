@@ -6,6 +6,8 @@ from Configs.DB_PARAMETERS import NAME_DB
 
 from Configs.GPT_Setting import MAX_SAVE_MESSAGE_HISTORY
 
+from SetupBot.Setup import db
+
 import aiomysql
 
 
@@ -13,7 +15,7 @@ async def set_sql_connect():
     return await aiomysql.connect(host=HOST, port=PORT, user=USER, password=PASSWORD, db=NAME_DB)
 
 
-async def read_message_history(user_id, db):
+async def read_message_history(user_id):
     async with db.cursor() as cur:
         await cur.execute(f'SELECT PR_ROLE, CONTENT '
                           f'FROM MessageHistory{user_id};')
@@ -22,14 +24,14 @@ async def read_message_history(user_id, db):
         return [{"role": result[0], "content": result[1]} for result in results]
 
 
-async def save_message_history(user_id, role, content, db):
+async def save_message_history(user_id, role, content):
     async with db.cursor() as cur:
         await cur.execute("INSERT INTO MessageHistory%s (PR_ROLE, CONTENT) "
                           "VALUES (%s, %s);", (user_id, role, content))
     await db.commit()
 
 
-async def del_old_message(user_id, db):
+async def del_old_message(user_id):
     async with db.cursor() as cur:
         await cur.execute(f"SELECT count(*) FROM MessageHistory{user_id};")
         result = (await cur.fetchone())[0]
@@ -39,10 +41,16 @@ async def del_old_message(user_id, db):
     await db.commit()
 
 
-async def create_if_not_exists_message_history(user_id, db):
+async def del_all_message(user_id):
+    async with db.cursor() as cur:
+        await cur.execute(f"TRUNCATE TABLE FROM MessageHistory{user_id};")
+    await db.commit()
+
+
+async def create_if_not_exists_message_history(user_id):
     async with db.cursor() as cur:
         await cur.execute(f"CREATE TABLE IF NOT EXISTS MessageHistory{user_id} ("
                           f"ID INT PRIMARY KEY AUTO_INCREMENT,"
                           f"PR_ROLE VARCHAR(128),"
-                          f"CONTENT VARCHAR(1024));")
+                          f"CONTENT VARCHAR(2048));")
     await db.commit()
