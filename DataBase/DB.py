@@ -12,7 +12,7 @@ import aiomysql
 
 
 async def set_sql_connect():
-    return await aiomysql.connect(host=HOST, port=PORT, user=USER, password=PASSWORD, db=NAME_DB)
+    return None
 
 
 async def read_message_history(user_id):

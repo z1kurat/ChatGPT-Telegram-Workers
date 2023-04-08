@@ -4,12 +4,19 @@ import logging
 
 from aiogram import Bot, Dispatcher
 
+from sqlalchemy.dialects.mysql import aiomysql
+
 from Configs.API import TELEGRAM_BOT_TOKEN
 
-from DataBase import DB
+from Configs.DB_PARAMETERS import HOST
+from Configs.DB_PARAMETERS import USER
+from Configs.DB_PARAMETERS import PORT
+from Configs.DB_PARAMETERS import PASSWORD
+from Configs.DB_PARAMETERS import NAME_DB
+
 
 loop = asyncio.get_event_loop()
-db = loop.run_until_complete(DB.set_sql_connect())
+db = loop.run_until_complete(await aiomysql.connect(host=HOST, port=PORT, user=USER, password=PASSWORD, db=NAME_DB))
 
 logging.basicConfig(level=logging.INFO)
 
