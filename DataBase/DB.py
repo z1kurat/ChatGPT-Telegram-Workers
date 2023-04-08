@@ -34,8 +34,8 @@ async def del_old_message(user_id, db):
     async with db.cursor() as cur:
         await cur.execute(f"SELECT count(*) FROM MessageHistory{user_id}")
         result = await cur.fetchone()
-
-        if result > 10:
+        print(result.values)
+        if result.values > 10:
             await cur.execute(f"DELETE TOP (2) FROM MessageHistory{user_id}")
 
 
