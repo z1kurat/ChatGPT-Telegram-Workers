@@ -15,8 +15,7 @@ async def read_message_history(user_id, db):
     async with db.cursor() as cur:
         await cur.execute(f'SELECT message '
                           f'FROM MessageHistory{user_id} '
-                          f'WHERE ID_USER = :user_id ',
-                          values={'user_id': user_id})
+                          f'WHERE ID_USER = {user_id}')
 
         results = await cur.fetchall()
 
