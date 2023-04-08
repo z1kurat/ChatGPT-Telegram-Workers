@@ -1,10 +1,10 @@
 import asyncio
 
+import aiomysql
+
 import logging
 
 from aiogram import Bot, Dispatcher
-
-from sqlalchemy.dialects.mysql import aiomysql
 
 from Configs.API import TELEGRAM_BOT_TOKEN
 
