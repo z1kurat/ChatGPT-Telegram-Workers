@@ -9,7 +9,7 @@ from Configs.API import TELEGRAM_BOT_TOKEN
 
 logging.basicConfig(level=logging.INFO)
 
-db_conn = await DB.set_sql_connect()
+db_conn = DB.set_sql_connect()
 
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
 dp = Dispatcher(bot)
