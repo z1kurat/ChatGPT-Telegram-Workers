@@ -6,7 +6,7 @@ from SetupBot.Setup import bot
 
 from Configs.Template_Responses import MESSAGE_RESET_CONTEXT
 
-from Command_Name import RESET_COMMAND
+from Command.Command_Name import RESET_COMMAND
 
 
 async def cmd_enable_context(callback_query: types.CallbackQuery):
