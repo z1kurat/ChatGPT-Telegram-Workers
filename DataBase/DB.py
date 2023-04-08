@@ -12,8 +12,9 @@ async def set_sql_connect():
 
 
 async def read(user_id, db):
-    results = await db.fetch_all('SELECT text '
-                                 'FROM messages '
-                                 'WHERE telegram_id = :telegram_id ',
-                                 values={'telegram_id': user_id})
+    results = db.fetch_all('SELECT text '
+                           'FROM messages '
+                           'WHERE telegram_id = :telegram_id ',
+                           values={'telegram_id': user_id})
+    
     return [next(result.values()) for result in results]
