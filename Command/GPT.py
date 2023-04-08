@@ -50,8 +50,8 @@ async def cmd_gpt(message: types.Message):
         await message.answer(content, reply_markup=Keyboards.reset_context_keyboard)
         print(f"send: {content}")
 
-        await DB.save_message_history(user_id, {"role": "user", "content": message_text}, db)
-        await DB.save_message_history(user_id, {"role": "assistant", "content": content}, db)
+        await DB.save_message_history(user_id, "user", message_text, db)
+        await DB.save_message_history(user_id, "assistant", content, db)
 
         await DB.del_old_message(user_id, db)
 

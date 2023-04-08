@@ -17,18 +17,17 @@ async def set_sql_connect():
 
 async def read_message_history(user_id, db):
     async with db.cursor() as cur:
-        await cur.execute(f'SELECT message '
-                          f'FROM MessageHistory{user_id} '
-                          f'WHERE ID_USER = {user_id};')
+        await cur.execute(f'SELECT PR_ROLE, CONTENT '
+                          f'FROM MessageHistory{user_id};')
 
         results = await cur.fetchall()
-        return [json.loads(result[0]) for result in results]
+        return [{"role": result[0], "content": result[1]} for result in results]
 
 
-async def save_message_history(user_id, text, db):
+async def save_message_history(user_id, role, content, db):
     async with db.cursor() as cur:
-        await cur.execute(f"INSERT INTO MessageHistory{user_id} (ID_USER, message)"
-                          f"VALUES ({user_id}, {json.dumps(text)});")
+        await cur.execute(f"INSERT INTO MessageHistory{user_id} (PR_ROLE, CONTENT)"
+                          f"VALUES ({str(role)}, {str(content)});")
     await db.commit()
 
 
@@ -46,6 +45,6 @@ async def create_if_not_exists_message_history(user_id, db):
     async with db.cursor() as cur:
         await cur.execute(f"CREATE TABLE IF NOT EXISTS MessageHistory{user_id} ("
                           f"ID INT PRIMARY KEY AUTO_INCREMENT,"
-                          f"ID_USER INT NOT NULL,"
-                          f"message VARCHAR(1024));")
+                          f"PR_ROLE VARCHAR(128),"
+                          f"CONTENT VARCHAR(1024));")
     await db.commit()
