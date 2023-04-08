@@ -28,7 +28,7 @@ async def read_message_history(user_id, db):
 async def save_message_history(user_id, text, db):
     async with db.cursor() as cur:
         await cur.execute(f"INSERT INTO MessageHistory{user_id} (ID_USER, message)"
-                          f"VALUES ({user_id}, {str(text)});")
+                          f"VALUES ({user_id}, {json.dumps(text)});")
     await db.commit()
 
 
