@@ -25,7 +25,8 @@ async def cmd_gpt(message: types.Message):
 
     user_messages = [
         {"role": "system", "content": DEFAULT_MOD},
-        {"role": "user", "content": message_text}]
+        {"role": "user", "content": message_text}
+    ]
 
     try:
         completion = await openai_async.chat_complete(
@@ -33,7 +34,7 @@ async def cmd_gpt(message: types.Message):
             timeout=TIME_OUT,
             payload={
                 "model": MODEL,
-                "user_messages": user_messages,
+                "messages": user_messages,
                 "temperature": TEMPERATURE,
                 "n": MAX_VALUE_COUNT
             }
