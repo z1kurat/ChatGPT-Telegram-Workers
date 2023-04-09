@@ -3,6 +3,8 @@ DEFAULT_MOD = 'You are a kind and helpful assistant who gives detailed and usefu
 MODEL = "gpt-3.5-turbo"
 TEMPERATURE = 0.7
 MAX_VALUE_COUNT = 1
+CHOICES = 1
+STOP = None
 
 TIME_OUT = 125
 

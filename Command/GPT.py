@@ -16,6 +16,8 @@ from Configs.GPT_Setting import MODEL
 from Configs.GPT_Setting import TEMPERATURE
 from Configs.GPT_Setting import MAX_VALUE_COUNT
 from Configs.GPT_Setting import TIME_OUT
+from Configs.GPT_Setting import CHOICES
+from Configs.GPT_Setting import STOP
 
 from Configs.Template_Responses import START_RESPONSE
 
@@ -48,6 +50,8 @@ async def cmd_gpt(message: types.Message):
                 "model": MODEL,
                 "messages": user_messages,
                 "temperature": TEMPERATURE,
+                "stop": STOP,
+                "choices": CHOICES,
                 "n": MAX_VALUE_COUNT
             }
         )
