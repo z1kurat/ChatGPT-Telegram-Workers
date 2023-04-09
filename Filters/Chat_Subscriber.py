@@ -14,7 +14,10 @@ import Keyboards
 class IsSubscriber(BoundFilter):
     async def check(self, message: types.Message):
         sub = await bot.get_chat_member(chat_id=ID_CHANNEL, user_id=message.from_user.id)
-        if sub.status == types.ChatMemberStatus.MEMBER:
+        if sub.status == types.ChatMemberStatus.MEMBER \
+                or sub.status == types.ChatMemberStatus.ADMINISTRATOR \
+                or sub.status == types.ChatMemberStatus.OWNER:
+
             return True
 
         await message.answer(text=SUBSCRIBER_TO_CHANNEL,

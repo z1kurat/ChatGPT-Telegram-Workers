@@ -13,3 +13,4 @@ reset_context_keyboard.add(enable_button)
 
 subscriber_keyboard = InlineKeyboardMarkup(row_width=2)
 button_to_subscribe = InlineKeyboardButton(text=SUBSCRIBE, url=URL_TO_SUBSCRIBE)
+subscriber_keyboard.add(button_to_subscribe)
