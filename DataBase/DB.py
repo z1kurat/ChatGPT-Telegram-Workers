@@ -25,13 +25,14 @@ async def del_old_message(user_id):
         result = (await cur.fetchone())[0]
 
         if result > MAX_SAVE_MESSAGE_HISTORY:
-            await cur.execute(f"DELETE TOP (2) FROM MessageHistory{user_id}")
+            await cur.execute(f"DELETE FROM MessageHistory{user_id} WHERE ID IN "
+                              f"(SELECT ID FROM MessageHistory{user_id} ORDER BY ID LIMIT {result - MAX_SAVE_MESSAGE_HISTORY});")
     await db.commit()
 
 
 async def del_all_message(user_id):
     async with db.cursor() as cur:
-        await cur.execute(f"TRUNCATE TABLE FROM MessageHistory{user_id};")
+        await cur.execute(f"TRUNCATE TABLE MessageHistory{user_id};")
     await db.commit()
 
 
