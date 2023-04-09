@@ -14,17 +14,16 @@ from Configs.DB_PARAMETERS import PORT
 from Configs.DB_PARAMETERS import PASSWORD
 from Configs.DB_PARAMETERS import NAME_DB
 
-
 loop = asyncio.get_event_loop()
 
-db = loop.run_until_complete(aiomysql.connect(host=HOST,
-                                              port=PORT,
-                                              user=USER,
-                                              password=PASSWORD,
-                                              db=NAME_DB))
+poll = loop.run_until_complete(aiomysql.create_pool(host=HOST,
+                                                    port=PORT,
+                                                    user=USER,
+                                                    password=PASSWORD,
+                                                    db=NAME_DB,
+                                                    loop=loop))
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
 dp = Dispatcher(bot)
-
