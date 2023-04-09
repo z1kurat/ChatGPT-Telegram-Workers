@@ -1,6 +1,7 @@
+import asyncio
+
 import Command
 
-from SetupBot.Setup import loop
 from SetupBot.Setup import dp
 from SetupBot.Setup import bot
 
@@ -14,4 +15,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    loop.run_until_complete(main())
+    asyncio.get_event_loop().run_until_complete((main()))
