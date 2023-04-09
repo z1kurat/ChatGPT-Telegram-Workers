@@ -77,7 +77,7 @@ async def add_new_user(user_id):
     pool = await get_pool()
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
-            await cur.execute(f"INSERT INTO MessageHistory%s (ID) "
+            await cur.execute(f"INSERT INTO User (ID) "
                               f"VALUES (%s) ON DUPLICATE KEY UPDATE "
                               f"ID=%s1;", (user_id, user_id, user_id))
         await conn.commit()
