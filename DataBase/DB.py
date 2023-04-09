@@ -49,7 +49,7 @@ async def del_old_message(user_id):
 
             if result > MAX_SAVE_MESSAGE_HISTORY:
                 await cur.execute(f"DELETE FROM MessageHistory{user_id} WHERE ID < "
-                                  f"(SELECT MAX(ID) - {result - MAX_SAVE_MESSAGE_HISTORY} FROM "
+                                  f"(SELECT MAX(ID) - {MAX_SAVE_MESSAGE_HISTORY} FROM "
                                   f"(SELECT ID FROM MessageHistory{user_id}) AS subQuery);")
         await conn.commit()
 
