@@ -1,2 +1,2 @@
-LOGGING_PATH = r"..\log\bot.log"
+LOGGING_PATH = r"..\bot.log"
 LOGGING_NAME = "bot.log"
