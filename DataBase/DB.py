@@ -37,7 +37,7 @@ async def save_message_history(user_id, role, content):
         async with conn.cursor() as cur:
             await cur.execute("INSERT INTO MessageHistory%s (PR_ROLE, CONTENT) "
                               "VALUES (%s, %s);", (user_id, role, content))
-    await conn.commit()
+        await conn.commit()
 
 
 async def del_old_message(user_id):
@@ -51,7 +51,7 @@ async def del_old_message(user_id):
                 await cur.execute(f"DELETE FROM MessageHistory{user_id} WHERE ID < "
                                   f"(SELECT MAX(ID) - {result - MAX_SAVE_MESSAGE_HISTORY} FROM "
                                   f"(SELECT ID FROM MessageHistory{user_id}) AS subQuery);")
-    await conn.commit()
+        await conn.commit()
 
 
 async def del_all_message(user_id):
@@ -59,7 +59,7 @@ async def del_all_message(user_id):
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
             await cur.execute(f"TRUNCATE TABLE MessageHistory{user_id};")
-    await conn.commit()
+        await conn.commit()
 
 
 async def create_if_not_exists_message_history(user_id):
@@ -70,4 +70,4 @@ async def create_if_not_exists_message_history(user_id):
                               f"ID INT PRIMARY KEY AUTO_INCREMENT,"
                               f"PR_ROLE VARCHAR(128),"
                               f"CONTENT VARCHAR(4096));")
-    await conn.commit()
+        await conn.commit()
