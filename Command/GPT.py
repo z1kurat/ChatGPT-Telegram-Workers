@@ -43,8 +43,6 @@ async def cmd_gpt(message: types.Message):
     user_messages.append({"role": "user", "content": message_text})
 
     try:
-        print(user_messages)
-
         completion = await openai_async.chat_complete(
             OPENAI_KEY,
             timeout=TIME_OUT,
@@ -60,6 +58,7 @@ async def cmd_gpt(message: types.Message):
 
         content = completion.json()["choices"][0]["message"]["content"]
         await message.answer(content, reply_markup=Keyboards.reset_context_keyboard)
+
         logging.info(f"send: {content}")
 
         await DB.save_message_history(user_id, "user", message_text)
