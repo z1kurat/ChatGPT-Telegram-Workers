@@ -18,4 +18,4 @@ START_RESPONSE = "Запрос отправлен..."
 
 SUBSCRIBER_TO_CHANNEL = "Для работы бота необходимо подписать на Telegram канал...\n\nПовторите попытку после подписки на канал."
 SUBSCRIBE = "Подписаться... "
-URL_TO_SUBSCRIBE = "@HomeDigestIT"
+URL_TO_SUBSCRIBE = "https://t.me/HomeDigestIT"
