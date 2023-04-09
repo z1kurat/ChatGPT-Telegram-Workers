@@ -51,7 +51,6 @@ async def cmd_gpt(message: types.Message):
                 "messages": user_messages,
                 "temperature": TEMPERATURE,
                 "stop": STOP,
-                "choices": CHOICES,
                 "n": MAX_VALUE_COUNT
             }
         )
