@@ -16,7 +16,7 @@ from Configs.DB_PARAMETERS import NAME_DB
 
 loop = asyncio.get_event_loop()
 
-poll = loop.run_until_complete(aiomysql.create_pool(host=HOST,
+pool = loop.run_until_complete(aiomysql.create_pool(host=HOST,
                                                     port=PORT,
                                                     user=USER,
                                                     password=PASSWORD,
