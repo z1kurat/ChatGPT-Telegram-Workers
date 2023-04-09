@@ -9,7 +9,7 @@ from Configs.Logging_Parametrs import LOGGING_PATH
 file_handler = logging.FileHandler(LOGGING_PATH)
 stream_handler = logging.StreamHandler()
 
-file_handler.setLevel(logging.WARNING)
+file_handler.setLevel(logging.INFO)
 stream_handler.setLevel(logging.INFO)
 
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
