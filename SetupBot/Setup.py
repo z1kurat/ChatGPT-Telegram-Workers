@@ -5,16 +5,20 @@ from aiogram import Bot, Dispatcher
 from Configs.API import TELEGRAM_BOT_TOKEN
 
 from Configs.Logging_Parametrs import LOGGING_PATH
-from Configs.Logging_Parametrs import LOGGING_NAME
 
-logging.basicConfig(filename=LOGGING_PATH,
-                    level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s',
-                    handlers=[
-                        logging.FileHandler(LOGGING_NAME, encoding='utf-8'),
-                        logging.StreamHandler()
-                        ]
-                    )
+file_handler = logging.FileHandler(LOGGING_PATH)
+stream_handler = logging.StreamHandler()
+
+file_handler.setLevel(logging.WARNING)
+stream_handler.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+stream_handler.setFormatter(formatter)
+
+logger = logging.getLogger()
+logger.addHandler(file_handler)
+logger.addHandler(stream_handler)
 
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
 dp = Dispatcher(bot)
