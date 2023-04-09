@@ -3,10 +3,14 @@ from aiogram import Dispatcher
 
 import openai_async
 
+from Filters.Chat_Subscriber import IsSubscriber
+
 from DataBase import DB
 
 from Configs.API import OPENAI_KEY
+
 from Configs.Template_Responses import ERROR_RESPONSE_MESSAGE
+
 from Configs.GPT_Setting import DEFAULT_MOD
 from Configs.GPT_Setting import MODEL
 from Configs.GPT_Setting import TEMPERATURE
@@ -15,7 +19,6 @@ from Configs.GPT_Setting import TIME_OUT
 
 from Configs.Template_Responses import START_RESPONSE
 
-from SetupBot.Setup import bot
 
 import Keyboards
 
@@ -71,4 +74,4 @@ async def cmd_gpt(message: types.Message):
 
 
 def register_handlers(dp: Dispatcher):
-    dp.register_message_handler(cmd_gpt)
+    dp.register_message_handler(cmd_gpt, IsSubscriber())
