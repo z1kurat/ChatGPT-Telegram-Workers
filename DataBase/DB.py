@@ -71,3 +71,13 @@ async def create_if_not_exists_message_history(user_id):
                               f"PR_ROLE VARCHAR(128),"
                               f"CONTENT VARCHAR(4096));")
         await conn.commit()
+
+
+async def add_new_user(user_id):
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f"INSERT INTO MessageHistory%s (ID) "
+                              f"VALUES (%s) ON DUPLICATE KEY UPDATE "
+                              f"ID=%s1;", (user_id, user_id, user_id))
+        await conn.commit()
