@@ -7,8 +7,6 @@ from Filters.Chat_Subscriber import IsSubscriber
 
 from DataBase import DB
 
-from SetupBot.Setup import logger
-
 from Configs.API import OPENAI_KEY
 
 from Configs.Template_Responses import ERROR_RESPONSE_MESSAGE
@@ -25,7 +23,7 @@ import Keyboards
 
 
 async def cmd_gpt(message: types.Message):
-    logger.info("-----Gotcha-----")
+    print("-----Gotcha-----")
     message_text = message.text
     user_id = message.from_user.id
 
@@ -33,9 +31,9 @@ async def cmd_gpt(message: types.Message):
                                                   disable_notification=True,
                                                   reply_markup=Keyboards.remove_keyboard)
 
-    logger.info(f"User: {message.chat.first_name}")
-    logger.info(f"message: {message_text}")
-    logger.info(f"id: {user_id}")
+    print(f"User: {message.chat.first_name}")
+    print(f"message: {message_text}")
+    print(f"id: {user_id}")
 
     user_messages = await DB.read_message_history(user_id)
 
@@ -59,7 +57,7 @@ async def cmd_gpt(message: types.Message):
         content = completion.json()["choices"][0]["message"]["content"]
         await message.answer(content, reply_markup=Keyboards.reset_context_keyboard)
 
-        logger.info(f"send: {content}")
+        print(f"send: {content}")
 
         await DB.save_message_history(user_id, "user", message_text)
         await DB.save_message_history(user_id, "assistant", content)
@@ -67,10 +65,10 @@ async def cmd_gpt(message: types.Message):
         await DB.del_old_message(user_id)
 
     except Exception as err:
-        logger.error(f"error: {err.args}")
+        print(f"error: {err.args}")
         await message.answer(ERROR_RESPONSE_MESSAGE)
 
-    logger.info("----------------\n")
+    print("----------------\n")
 
 
 def register_handlers(dp: Dispatcher):
