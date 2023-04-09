@@ -1,9 +1,10 @@
+import asyncio
+
 import Command
 
 from aiogram.utils import executor
 
 from SetupBot.Setup import dp
-from SetupBot.Setup import bot
 
 
 async def main():
@@ -11,8 +12,8 @@ async def main():
     Command.Reset_Context.register_handlers(dp)
     Command.GPT.register_handlers(dp)
 
-    await dp.start_polling(bot)
+    await executor.start_polling(dp)
 
 
 if __name__ == "__main__":
-    executor.start_polling(dp)
+    asyncio.run(main())
