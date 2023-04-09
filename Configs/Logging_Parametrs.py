@@ -1,1 +1,1 @@
-LOGGING_PATH = r"..\log"
+LOGGING_PATH = r"..\log\bot.log"
