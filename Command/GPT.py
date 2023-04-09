@@ -67,7 +67,7 @@ async def cmd_gpt(message: types.Message):
         await DB.del_old_message(user_id)
 
     except Exception as err:
-        logger.info(f"error: {err.args}")
+        logger.error(f"error: {err.args}")
         await message.answer(ERROR_RESPONSE_MESSAGE)
 
     logger.info("----------------\n")
