@@ -12,3 +12,6 @@ kb_client = ReplyKeyboardMarkup(resize_keyboard=True,
 kb_client.add(enable_context)
 kb_client.add(disable_context)
 
+
+remove_keyboard = ReplyKeyboardRemove()
+

@@ -13,6 +13,10 @@ from Configs.GPT_Setting import TEMPERATURE
 from Configs.GPT_Setting import MAX_VALUE_COUNT
 from Configs.GPT_Setting import TIME_OUT
 
+from Configs.Template_Responses import START_RESPONSE
+
+from SetupBot.Setup import bot
+
 import Keyboards
 
 
@@ -20,6 +24,10 @@ async def cmd_gpt(message: types.Message):
     print("-----Gotcha-----")
     message_text = message.text
     user_id = message.from_user.id
+
+    start_response_message = await message.answer(START_RESPONSE,
+                                                  disable_notification=True,
+                                                  reply_markup=Keyboards.remove_keyboard)
 
     print(f"User: {message.chat.first_name}")
     print(f"message: {message_text}")
@@ -44,6 +52,8 @@ async def cmd_gpt(message: types.Message):
             }
         )
 
+        await start_response_message.delete()
+
         content = completion.json()["choices"][0]["message"]["content"]
         await message.answer(content, reply_markup=Keyboards.reset_context_keyboard)
         print(f"send: {content}")
@@ -54,7 +64,7 @@ async def cmd_gpt(message: types.Message):
         await DB.del_old_message(user_id)
 
     except Exception as err:
-        print(err.args)
+        print(f"error: {err.args}")
         await message.answer(ERROR_RESPONSE_MESSAGE)
 
     print("----------------\n")
