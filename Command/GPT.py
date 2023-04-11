@@ -39,6 +39,9 @@ async def cmd_gpt(message: types.Message):
 
     user_messages = await DB.read_message_history(user_id)
 
+    if user_messages is None:
+        user_messages = []
+
     user_messages.append({"role": "system", "content": DEFAULT_MOD})
     user_messages.append({"role": "user", "content": message_text})
 
