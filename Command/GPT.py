@@ -66,7 +66,7 @@ async def cmd_gpt(message: types.Message):
         await DB.save_message_history(user_id, "user", message_text)
         await DB.save_message_history(user_id, "assistant", content)
 
-        await DB.del_old_message(user_id)
+        #await DB.del_old_message(user_id)
 
     except Exception as err:
         print(f"error: {err.args}")
