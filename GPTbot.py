@@ -9,6 +9,7 @@ import Filters
 
 if __name__ == "__main__":
     Filters.Chat_Subscriber.register_filters(dp)
+    Filters.All.register_filters(dp)
 
     Command.Start.register_handlers(dp)
     Command.Сhannel_Post_Comment.register_handlers(dp)

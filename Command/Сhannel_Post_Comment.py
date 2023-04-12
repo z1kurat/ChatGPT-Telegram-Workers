@@ -12,7 +12,8 @@ from Configs.GPT_Setting import TIME_OUT
 from Configs.GPT_Setting import STOP
 
 import Keyboards
-from Filters.Chat_Subscriber import IsSubscriber
+
+from Filters.All import ForAll
 
 
 async def cmd_gpt(message: types.Message):
@@ -52,4 +53,4 @@ async def cmd_gpt(message: types.Message):
 
 
 def register_handlers(dp: Dispatcher):
-    dp.register_channel_post_handler(cmd_gpt, True)
+    dp.register_channel_post_handler(cmd_gpt, ForAll())
