@@ -13,6 +13,8 @@ from Configs.GPT_Setting import STOP
 
 import Keyboards
 
+from SetupBot.Setup import bot
+
 from Filters.All import ForAll
 
 
@@ -41,7 +43,10 @@ async def cmd_gpt(message: types.Message):
         )
 
         content = completion.json()["choices"][0]["message"]["content"]
-        await message.answer(content, reply_markup=Keyboards.reset_context_keyboard)
+
+        post_id = message.message_id
+        chat_id = message.chat.id
+        await bot.send_message(chat_id=chat_id, text=content, reply_to_message_id=post_id)
 
         print(f"send: {content}")
         print(f"message history: {user_messages}")
