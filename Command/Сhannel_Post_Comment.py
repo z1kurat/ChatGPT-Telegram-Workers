@@ -11,13 +11,13 @@ from Configs.GPT_Setting import MAX_VALUE_COUNT
 from Configs.GPT_Setting import TIME_OUT
 from Configs.GPT_Setting import STOP
 
-import Keyboards
-
 from SetupBot.Setup import bot
+from SetupBot.Setup import dp
 
 from Filters.All import ForAll
 
 
+@dp.channel_post_handler(chat_id=1001376227218, content_types=types.ContentType.TEXT)
 async def cmd_gpt(message: types.Message):
     print("-----Gotcha-----")
     message_text = message.text
@@ -59,3 +59,4 @@ async def cmd_gpt(message: types.Message):
 
 def register_handlers(dp: Dispatcher):
     dp.register_channel_post_handler(cmd_gpt, ForAll())
+    dp.register_edited_channel_post_handler(cmd_gpt, ForAll())
