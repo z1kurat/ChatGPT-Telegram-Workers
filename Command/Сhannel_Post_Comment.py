@@ -1,5 +1,5 @@
 from aiogram import types
-from aiogram import Dispatcher
+from aiogram.dispatcher.filters import Command
 
 import openai_async
 
@@ -11,14 +11,12 @@ from Configs.GPT_Setting import MAX_VALUE_COUNT
 from Configs.GPT_Setting import TIME_OUT
 from Configs.GPT_Setting import STOP
 
-from SetupBot.Setup import bot
 from SetupBot.Setup import dp
+from SetupBot.Setup import bot
 
-from Filters.All import ForAll
 
-
-@dp.channel_post_handler(content_types=types.ContentType.TEXT)
-async def cmd_gpt(message: types.Message):
+@dp.message_handler(Command("comment"))
+async def cmd_comment_gpt(message: types.Message):
     print("-----Gotcha-----")
     message_text = message.text
 
@@ -47,7 +45,9 @@ async def cmd_gpt(message: types.Message):
         chat_id = message.chat.id
         post_id = message.reply_to_message.message_id
 
-        await bot.send_message(chat_id, content, post_id)
+        await bot.send_message(chat_id, content, reply_to_message_id=post_id)
+
+        await message.delete()
 
         print(f"send: {content}")
         print(f"message history: {user_messages}")
@@ -57,7 +57,3 @@ async def cmd_gpt(message: types.Message):
 
     print("----------------\n")
 
-
-def register_handlers(dp: Dispatcher):
-    dp.register_channel_post_handler(cmd_gpt, ForAll())
-    dp.register_edited_channel_post_handler(cmd_gpt, ForAll())

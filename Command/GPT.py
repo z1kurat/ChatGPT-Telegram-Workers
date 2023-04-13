@@ -20,9 +20,12 @@ from Configs.GPT_Setting import STOP
 
 from Configs.Template_Responses import START_RESPONSE
 
+from SetupBot.Setup import dp
+
 import Keyboards
 
 
+@dp.message_handler(IsSubscriber())
 async def cmd_gpt(message: types.Message):
     print("-----Gotcha-----")
     message_text = message.text
@@ -68,7 +71,7 @@ async def cmd_gpt(message: types.Message):
         await DB.save_message_history(user_id, "user", message_text)
         await DB.save_message_history(user_id, "assistant", content)
 
-        #await DB.del_old_message(user_id)
+        # await DB.del_old_message(user_id)
 
     except Exception as err:
         print(f"error: {err.args}")
