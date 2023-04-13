@@ -18,13 +18,13 @@ from SetupBot.Setup import bot
 @dp.message_handler(Command("comment"))
 async def cmd_comment_gpt(message: types.Message):
     print("-----Gotcha-----")
-    message_text = message.text
+    message_text = message.text.split(' ', 1)[1]
 
     print(f"message: {message_text}")
 
     user_messages = [{"role": "system",
-                      "content": "Ты комментируешь на русском языке посты в Telegram канале. Твои посты короткие и "
-                                 "забавные."},
+                      "content": "Тебя зовут - 'IT по-домашнему', ты комментируешь посты на русском языке Telegram канале. Твои посты короткие и "
+                                 "забавные. Ты не даешь рекомендаций - ты только шутишь и комментируешь."},
                      {"role": "user", "content": message_text}]
 
     try:
