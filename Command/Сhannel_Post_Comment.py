@@ -17,7 +17,7 @@ from SetupBot.Setup import bot
 
 @dp.message_handler(Command("comment"))
 async def cmd_comment_gpt(message: types.Message):
-    if message.chat.type != 'group':
+    if message.chat.type != 'supergroup':
         return
 
     print("-----Gotcha-----")
