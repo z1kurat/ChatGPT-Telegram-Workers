@@ -1,5 +1,4 @@
 from aiogram import types
-from aiogram import Dispatcher
 
 import openai_async
 
@@ -78,7 +77,3 @@ async def cmd_gpt(message: types.Message):
         await message.answer(ERROR_RESPONSE_MESSAGE)
 
     print("----------------\n")
-
-
-def register_handlers(dp: Dispatcher):
-    dp.register_message_handler(cmd_gpt, IsSubscriber())
