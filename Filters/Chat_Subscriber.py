@@ -13,6 +13,9 @@ import Keyboards
 
 class IsSubscriber(BoundFilter):
     async def check(self, message: types.Message):
+        if message.chat.type != 'private':
+            raise CancelHandler()
+
         sub = await bot.get_chat_member(chat_id=ID_CHANNEL, user_id=message.from_user.id)
         if sub.status == types.ChatMemberStatus.MEMBER \
                 or sub.status == types.ChatMemberStatus.ADMINISTRATOR \
