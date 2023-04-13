@@ -26,6 +26,9 @@ import Keyboards
 
 @dp.message_handler(IsSubscriber())
 async def cmd_gpt(message: types.Message):
+    if message.chat.type != 'private':
+        return
+
     print("-----Gotcha-----")
     message_text = message.text
     user_id = message.from_user.id

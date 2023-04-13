@@ -17,7 +17,11 @@ from SetupBot.Setup import bot
 
 @dp.message_handler(Command("comment"))
 async def cmd_comment_gpt(message: types.Message):
+    if message.chat.type != 'group':
+        return
+
     print("-----Gotcha-----")
+
     message_text = message.text.split(' ', 1)[1]
 
     print(f"message: {message_text}")
