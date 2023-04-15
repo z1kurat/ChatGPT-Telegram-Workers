@@ -65,6 +65,8 @@ async def cmd_gpt(message: types.Message):
     message_text = message.text
     user_id = message.from_user.id
 
+    await DB.update_last_message(user_id, message_text)
+
     start_response_message = await message.answer(START_RESPONSE,
                                                   disable_notification=True,
                                                   reply_markup=Keyboards.remove_keyboard)
@@ -84,7 +86,5 @@ async def cmd_gpt(message: types.Message):
     await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
 
     await save_data(user_id, message_text, response)
-
-    await DB.update_last_message(user_id, message_text)
 
     logger_history.info(message.chat.first_name + " - Good!")
