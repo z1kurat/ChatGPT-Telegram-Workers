@@ -41,6 +41,10 @@ async def cmd_replay_context(callback_query: types.CallbackQuery):
 
     await start_response_message.delete()
 
+    if response is None:
+        await message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
+        return
+
     await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
 
     await save_data(user_id, last_message, response)

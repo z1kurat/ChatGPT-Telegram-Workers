@@ -26,7 +26,5 @@ file_handler_error.setLevel(logging.ERROR)
 logger_history.addHandler(file_handler_history)
 logger_error.addHandler(file_handler_error)
 
-openai.api_key = OPENAI_KEY
-
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
 dp = Dispatcher(bot)

@@ -1,6 +1,6 @@
-from aiogram import types
+import openai_async
 
-import openai
+from aiogram import types
 
 from Filters.Chat_Subscriber import IsSubscriber
 
@@ -37,12 +37,16 @@ async def get_user_messages(user_id) -> list[dict[str, str]]:
 
 async def get_response_gpt(user_messages):
     try:
-        completion = await openai.ChatCompletion.create(
-            model=MODEL,
-            messages=user_messages,
-            temperature=TEMPERATURE,
-            stop=STOP,
-            n=MAX_VALUE_COUNT
+        completion = await openai_async.chat_complete(
+            OPENAI_KEY,
+            timeout=TIME_OUT,
+            payload={
+                "model": MODEL,
+                "messages": user_messages,
+                "temperature": TEMPERATURE,
+                "stop": STOP,
+                "n": MAX_VALUE_COUNT
+            }
         )
 
         return completion.json()["choices"][0]["message"]["content"]
