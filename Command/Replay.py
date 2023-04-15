@@ -8,7 +8,7 @@ from Command.GPT import save_data
 
 from Configs.GPT_Setting import DEFAULT_MOD
 
-from Configs.Template_Responses import START_RESPONSE, ERROR_RESPONSE_MESSAGE
+from Configs.Template_Responses import START_RESPONSE, ERROR_RESPONSE_MESSAGE, AWAIT_RESPONSE_MESSAGE
 
 from SetupBot.Setup import logger_history
 from SetupBot.Setup import dp
@@ -24,6 +24,14 @@ async def cmd_replay_context_command(message: types.Message):
     user_id = message.from_user.id
     last_message = await DB.read_last_message(user_id)
     message = message.text
+
+    is_working = await DB.get_working(user_id)
+
+    if is_working:
+        await message.answer(AWAIT_RESPONSE_MESSAGE, disable_notification=True)
+        return
+
+    await DB.set_working(user_id, True)
 
     start_response_message = await message.answer(START_RESPONSE,
                                                   disable_notification=True,
@@ -42,9 +50,11 @@ async def cmd_replay_context_command(message: types.Message):
         await message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
         return
 
-    await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
-
     await save_data(user_id, last_message, response)
+
+    await DB.set_working(user_id, False)
+
+    await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
 
     logger_history.info(message.chat.first_name + " - Good!")
 
@@ -54,6 +64,14 @@ async def cmd_replay_context(callback_query: types.CallbackQuery):
     user_id = callback_query.from_user.id
     last_message = await DB.read_last_message(user_id)
     message = callback_query.message
+
+    is_working = await DB.get_working(user_id)
+
+    if is_working:
+        await message.answer(AWAIT_RESPONSE_MESSAGE, disable_notification=True)
+        return
+
+    await DB.set_working(user_id, True)
 
     await message.delete()
 
@@ -74,11 +92,13 @@ async def cmd_replay_context(callback_query: types.CallbackQuery):
         await message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
         return
 
-    await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
-
     await save_data(user_id, last_message, response)
 
     logger_history.info(message.chat.first_name + " - Good!")
+
+    await DB.set_working(user_id, False)
+
+    await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
 
     await bot.answer_callback_query(callback_query.id)
 
