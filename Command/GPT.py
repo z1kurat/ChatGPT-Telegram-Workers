@@ -52,7 +52,6 @@ async def get_response_gpt(user_messages):
         return completion.json()["choices"][0]["message"]["content"]
 
     except Exception as err:
-        print(err.args)
         logger_error.error(err.args)
         return None
 
@@ -83,9 +82,8 @@ async def cmd_gpt(message: types.Message):
 
     await start_response_message.delete()
 
-    if response:
-        await message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
-        return
+    await message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
+    return
 
     await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
 
@@ -94,4 +92,3 @@ async def cmd_gpt(message: types.Message):
     await DB.update_last_message(user_id, message_text)
 
     logger_history.info(message.chat.first_name + " - Good!")
-
