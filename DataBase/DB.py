@@ -49,7 +49,7 @@ async def read_last_message(user_id) -> str:
                               f'FROM User WHERE ID = {user_id};')
 
             results = await cur.fetchall()
-            return results[0]
+            return results[0][0]
 
 
 async def save_message_history(user_id, role, content):
