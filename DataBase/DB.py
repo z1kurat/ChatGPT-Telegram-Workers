@@ -39,6 +39,25 @@ async def update_last_message(user_id, last_message):
             await conn.commit()
 
 
+async def set_working(user_id, is_working):
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute("UPDATE User Set working = %s WHERE ID = %s;", (is_working, user_id))
+            await conn.commit()
+
+
+async def get_working(user_id) -> bool:
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f'SELECT working '
+                              f'FROM User WHERE ID = {user_id};')
+
+            results = await cur.fetchall()
+            return results[0][0]
+
+
 async def read_last_message(user_id) -> str:
     pool = await get_pool()
     async with pool.acquire() as conn:

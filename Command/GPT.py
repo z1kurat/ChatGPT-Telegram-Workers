@@ -9,6 +9,7 @@ from DataBase import DB
 from Configs.API import OPENAI_KEY
 
 from Configs.Template_Responses import ERROR_RESPONSE_MESSAGE
+from Configs.Template_Responses import AWAIT_RESPONSE_MESSAGE
 
 from Configs.GPT_Setting import DEFAULT_MOD
 from Configs.GPT_Setting import MODEL
@@ -66,6 +67,14 @@ async def cmd_gpt(message: types.Message):
     message_text = message.text
     user_id = message.from_user.id
 
+    is_working = DB.get_working(user_id)
+
+    if is_working:
+        await message.answer(AWAIT_RESPONSE_MESSAGE, disable_notification=True)
+        return
+
+    await DB.set_working(user_id, True)
+
     await DB.update_last_message(user_id, message_text)
 
     start_response_message = await message.answer(START_RESPONSE,
@@ -73,7 +82,7 @@ async def cmd_gpt(message: types.Message):
                                                   reply_markup=Keyboards.remove_keyboard)
 
     user_messages = await get_user_messages(user_id)
-    
+
     if user_messages is None:
         user_messages = []
 
@@ -86,10 +95,13 @@ async def cmd_gpt(message: types.Message):
 
     if response is None:
         await message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
+        await DB.set_working(user_id, False)
         return
 
-    await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
-
     await save_data(user_id, message_text, response)
+
+    await DB.set_working(user_id, False)
+
+    await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
 
     logger_history.info(message.chat.first_name + " - Good!")
