@@ -36,7 +36,7 @@ async def cmd_comment_gpt(message: types.Message):
     chat_id = message.chat.id
     post_id = message.reply_to_message.message_id
 
-    await bot.send_message(chat_id, response, rSeply_to_message_id=post_id)
+    await bot.send_message(chat_id, response, reply_to_message_id=post_id)
 
     await message.delete()
 
