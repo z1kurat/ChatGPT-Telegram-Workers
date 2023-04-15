@@ -51,7 +51,7 @@ async def cmd_replay_context(callback_query: types.CallbackQuery):
 
 
 @dp.message_handler(Command(REPLAY_COMMAND))
-async def cmd_replay_context(message: types.Message):
+async def cmd_replay_context_command(message: types.Message):
     user_id = message.from_user.id
     last_message = await DB.read_last_message(user_id)
     message = message.text
