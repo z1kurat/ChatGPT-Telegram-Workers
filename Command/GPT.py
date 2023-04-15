@@ -57,11 +57,8 @@ async def get_response_gpt(user_messages):
 
 
 async def save_data(user_id, message_text, response):
-    if message_text is not None:
-        await DB.save_message_history(user_id, "user", message_text)
-
-    if response is not None:
-        await DB.save_message_history(user_id, "assistant", response)
+    await DB.save_message_history(user_id, "user", message_text)
+    await DB.save_message_history(user_id, "assistant", response)
 
 
 @dp.message_handler(IsSubscriber())
