@@ -19,6 +19,7 @@ from SetupBot.Setup import bot
 
 @dp.message_handler(Command(COMMENT_COMMAND))
 async def cmd_comment_gpt(message: types.Message):
+    print(message.chat.type)
     if message.chat.type != 'supergroup':
         return
 
