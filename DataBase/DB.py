@@ -37,7 +37,7 @@ async def update_last_message(user_id, last_message):
     pool = await get_pool()
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
-            await cur.execute("UPDATE User Set last_message = '%s' WHERE ID = %s;", last_message, user_id)
+            await cur.execute("UPDATE User Set last_message = '%s' WHERE ID = %s;", (last_message, user_id))
         await conn.commit()
 
 
