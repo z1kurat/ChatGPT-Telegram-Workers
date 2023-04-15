@@ -38,7 +38,6 @@ async def get_user_messages(user_id) -> list[dict[str, str]]:
 async def get_response_gpt(user_messages):
     try:
         completion = await openai.ChatCompletion.create(
-            OPENAI_KEY,
             timeout=TIME_OUT,
             payload={
                 "model": MODEL,
@@ -82,6 +81,7 @@ async def cmd_gpt(message: types.Message):
 
     await start_response_message.delete()
 
+
     await message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
     return
 
@@ -92,3 +92,4 @@ async def cmd_gpt(message: types.Message):
     await DB.update_last_message(user_id, message_text)
 
     logger_history.info(message.chat.first_name + " - Good!")
+

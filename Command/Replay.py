@@ -22,10 +22,13 @@ from Command.Command_Name import REPLAY_COMMAND
 async def cmd_replay_context(callback_query: types.CallbackQuery):
     user_id = callback_query.from_user.id
     last_message = await DB.read_last_message(user_id)
+    message = callback_query.message
 
-    start_response_message = await callback_query.message.answer(START_RESPONSE,
-                                                                 disable_notification=True,
-                                                                 reply_markup=Keyboards.remove_keyboard)
+    await message.delete()
+
+    start_response_message = await message.answer(START_RESPONSE,
+                                                  disable_notification=True,
+                                                  reply_markup=Keyboards.remove_keyboard)
 
     user_messages = await GPT.get_user_messages(user_id)
 
