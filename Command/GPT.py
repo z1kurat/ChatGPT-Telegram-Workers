@@ -67,8 +67,8 @@ async def cmd_gpt(message: types.Message):
     message_text = message.text
     user_id = message.from_user.id
 
-    is_working = DB.get_working(user_id)
-    print(is_working)
+    is_working = await DB.get_working(user_id)
+
     if is_working:
         await message.answer(AWAIT_RESPONSE_MESSAGE, disable_notification=True)
         return
