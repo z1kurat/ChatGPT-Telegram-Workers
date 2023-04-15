@@ -1,16 +1,6 @@
 from aiogram import types
 from aiogram.dispatcher.filters import Command
 
-import openai_async
-
-from Configs.API import OPENAI_KEY
-
-from Configs.GPT_Setting import MODEL
-from Configs.GPT_Setting import TEMPERATURE
-from Configs.GPT_Setting import MAX_VALUE_COUNT
-from Configs.GPT_Setting import TIME_OUT
-from Configs.GPT_Setting import STOP
-
 from Command.Command_Name import COMMENT_COMMAND
 
 from Command import GPT
