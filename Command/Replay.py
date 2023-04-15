@@ -12,6 +12,7 @@ from Configs.Template_Responses import START_RESPONSE, ERROR_RESPONSE_MESSAGE
 
 from SetupBot.Setup import logger_history
 from SetupBot.Setup import dp
+from SetupBot.Setup import bot
 
 from DataBase import DB
 
@@ -48,6 +49,8 @@ async def cmd_replay_context(callback_query: types.CallbackQuery):
     await save_data(user_id, last_message, response)
 
     logger_history.info(message.chat.first_name + " - Good!")
+
+    await bot.answer_callback_query(callback_query.id)
 
 
 @dp.message_handler(Command(REPLAY_COMMAND))
