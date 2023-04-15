@@ -1,3 +1,5 @@
+from typing import List, Dict, Any
+
 from Configs.GPT_Setting import MAX_SAVE_MESSAGE_HISTORY
 
 import aiomysql
@@ -20,7 +22,7 @@ async def get_pool():
     return pool
 
 
-async def read_message_history(user_id):
+async def read_message_history(user_id) -> list[dict[str, str]]:
     pool = await get_pool()
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
@@ -29,6 +31,26 @@ async def read_message_history(user_id):
 
             results = await cur.fetchall()
             return [{"role": result[0], "content": result[1]} for result in results]
+
+
+async def update_last_message(user_id, last_message):
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f"UPDATE User Set last_message = {last_message} WHERE "
+                              f"ID = {user_id};")
+        await conn.commit()
+
+
+async def read_last_message(user_id) -> str:
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(f'SELECT last_message '
+                              f'FROM User WHERE ID = {user_id};')
+
+            results = await cur.fetchall()
+            return results[0]
 
 
 async def save_message_history(user_id, role, content):

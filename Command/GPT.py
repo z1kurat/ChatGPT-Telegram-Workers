@@ -1,6 +1,6 @@
 from aiogram import types
 
-import openai_async
+import openai
 
 from Filters.Chat_Subscriber import IsSubscriber
 
@@ -20,34 +20,24 @@ from Configs.GPT_Setting import STOP
 from Configs.Template_Responses import START_RESPONSE
 
 from SetupBot.Setup import dp
+from SetupBot.Setup import logger_error
+from SetupBot.Setup import logger_history
 
 import Keyboards
 
 
-@dp.message_handler(IsSubscriber())
-async def cmd_gpt(message: types.Message):
-    print("-----Gotcha-----")
-    message_text = message.text
-    user_id = message.from_user.id
-
-    start_response_message = await message.answer(START_RESPONSE,
-                                                  disable_notification=True,
-                                                  reply_markup=Keyboards.remove_keyboard)
-
-    print(f"User: {message.chat.first_name}")
-    print(f"message: {message_text}")
-    print(f"id: {user_id}")
-
+async def get_user_messages(user_id) -> list[dict[str, str]]:
     user_messages = await DB.read_message_history(user_id)
 
-    if user_messages is None:
+    if user_messages is None or len(user_messages) == 0:
         user_messages = []
 
-    user_messages.append({"role": "system", "content": DEFAULT_MOD})
-    user_messages.append({"role": "user", "content": message_text})
+    return user_messages
 
+
+async def get_response_gpt(user_messages):
     try:
-        completion = await openai_async.chat_complete(
+        completion = await openai.ChatCompletion.create(
             OPENAI_KEY,
             timeout=TIME_OUT,
             payload={
@@ -59,21 +49,48 @@ async def cmd_gpt(message: types.Message):
             }
         )
 
-        await start_response_message.delete()
-
-        content = completion.json()["choices"][0]["message"]["content"]
-        await message.answer(content, reply_markup=Keyboards.reset_context_keyboard)
-
-        print(f"send: {content}")
-        print(f"message history: {user_messages}")
-
-        await DB.save_message_history(user_id, "user", message_text)
-        await DB.save_message_history(user_id, "assistant", content)
-
-        # await DB.del_old_message(user_id)
+        return completion.json()["choices"][0]["message"]["content"]
 
     except Exception as err:
-        print(f"error: {err.args}")
-        await message.answer(ERROR_RESPONSE_MESSAGE)
+        logger_error.error(err.args)
+        return None
 
-    print("----------------\n")
+
+async def save_data(user_id, message_text, response):
+    if message_text is not None:
+        await DB.save_message_history(user_id, "user", message_text)
+
+    if response is not None:
+        await DB.save_message_history(user_id, "assistant", response)
+
+
+@dp.message_handler(IsSubscriber())
+async def cmd_gpt(message: types.Message):
+    message_text = message.text
+    user_id = message.from_user.id
+
+    start_response_message = await message.answer(START_RESPONSE,
+                                                  disable_notification=True,
+                                                  reply_markup=Keyboards.remove_keyboard)
+
+    user_messages = await get_user_messages(user_id)
+
+    user_messages.append({"role": "system", "content": DEFAULT_MOD})
+    user_messages.append({"role": "user", "content": message_text})
+
+    response = await get_response_gpt(user_messages)
+
+    await start_response_message.delete()
+
+    if response is not None:
+        await message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
+        return
+
+    await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
+
+    await save_data(user_id, message_text, response)
+
+    await DB.update_last_message(user_id, message_text)
+
+    logger_history.info(message.chat.first_name + " - Good!")
+

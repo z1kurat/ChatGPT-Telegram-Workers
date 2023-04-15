@@ -11,11 +11,13 @@ from Configs.GPT_Setting import MAX_VALUE_COUNT
 from Configs.GPT_Setting import TIME_OUT
 from Configs.GPT_Setting import STOP
 
+from Command.Command_Name import COMMENT_COMMAND
+
 from SetupBot.Setup import dp
 from SetupBot.Setup import bot
 
 
-@dp.message_handler(Command("comment"))
+@dp.message_handler(Command(COMMENT_COMMAND))
 async def cmd_comment_gpt(message: types.Message):
     if message.chat.type != 'supergroup':
         return
