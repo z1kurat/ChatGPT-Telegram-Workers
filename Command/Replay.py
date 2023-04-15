@@ -24,8 +24,6 @@ async def cmd_replay_context(callback_query: types.CallbackQuery):
     last_message = await DB.read_last_message(user_id)
     message = callback_query.message
 
-    print(last_message)
-
     await message.delete()
 
     start_response_message = await message.answer(START_RESPONSE,

@@ -84,8 +84,9 @@ async def cmd_gpt(message: types.Message):
 
     await start_response_message.delete()
 
-    await message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
-    return
+    if response is None:
+        await message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
+        return
 
     await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
 
