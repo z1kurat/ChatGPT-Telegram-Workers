@@ -26,9 +26,6 @@ file_handler_error.setLevel(logging.ERROR)
 logger_history.addHandler(file_handler_history)
 logger_error.addHandler(file_handler_error)
 
-logger_error.error("Start debug...")
-logger_history.info("Start info...")
-
 openai.api_key = OPENAI_KEY
 
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
