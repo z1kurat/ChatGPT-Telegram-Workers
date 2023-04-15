@@ -19,7 +19,7 @@ from Command.Command_Name import REPLAY_COMMAND
 
 
 @dp.callback_query_handler(Text(REPLAY_COMMAND))
-async def cmd_enable_context(callback_query: types.CallbackQuery):
+async def cmd_replay_context(callback_query: types.CallbackQuery):
     user_id = callback_query.from_user.id
     last_message = await DB.read_last_message(user_id)
 
