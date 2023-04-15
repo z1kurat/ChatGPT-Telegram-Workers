@@ -1,11 +1,8 @@
 import logging.handlers
 
-import openai
-
 from aiogram import Bot, Dispatcher
 
 from Configs.API import TELEGRAM_BOT_TOKEN
-from Configs.API import OPENAI_KEY
 
 logger_history = logging.getLogger("bot_history")
 logger_history.setLevel(logging.INFO)

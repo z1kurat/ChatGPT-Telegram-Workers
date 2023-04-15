@@ -1,5 +1,4 @@
 from aiogram import types
-from aiogram import Dispatcher
 
 from aiogram.dispatcher.filters import BoundFilter
 from aiogram.dispatcher.handler import CancelHandler
@@ -15,7 +14,7 @@ import Keyboards
 class IsSubscriber(BoundFilter):
     async def check(self, message: types.Message):
         if message.chat.type != 'private':
-            raise CancelHandler()
+            return False
 
         sub = await bot.get_chat_member(chat_id=ID_CHANNEL, user_id=message.from_user.id)
         if sub.status == types.ChatMemberStatus.MEMBER \
@@ -29,6 +28,3 @@ class IsSubscriber(BoundFilter):
 
         raise CancelHandler()
 
-
-def register_filters(dp: Dispatcher):
-    dp.filters_factory.bind(IsSubscriber)
