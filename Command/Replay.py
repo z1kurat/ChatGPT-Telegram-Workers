@@ -10,7 +10,7 @@ from Configs.GPT_Setting import DEFAULT_MOD
 
 from Configs.Template_Responses import START_RESPONSE, ERROR_RESPONSE_MESSAGE
 
-from SetupBot.Setup import bot, logger_history
+from SetupBot.Setup import logger_history
 from SetupBot.Setup import dp
 
 from DataBase import DB
@@ -23,6 +23,8 @@ async def cmd_replay_context(callback_query: types.CallbackQuery):
     user_id = callback_query.from_user.id
     last_message = await DB.read_last_message(user_id)
     message = callback_query.message
+
+    print(last_message)
 
     await message.delete()
 
@@ -40,15 +42,12 @@ async def cmd_replay_context(callback_query: types.CallbackQuery):
     await start_response_message.delete()
 
     if response is None:
-        await callback_query.message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
+        await message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
         return
 
-    await callback_query.message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
+    await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
 
     await save_data(user_id, last_message, response)
 
-    await DB.update_last_message(user_id, last_message)
+    logger_history.info(message.chat.first_name + " - Good!")
 
-    logger_history.info(callback_query.message.chat.first_name + " - Good!")
-
-    await bot.answer_callback_query(callback_query.id)
