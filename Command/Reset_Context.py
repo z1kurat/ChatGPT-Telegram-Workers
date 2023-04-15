@@ -1,5 +1,5 @@
 from aiogram import types
-from aiogram.dispatcher.filters import Text
+from aiogram.dispatcher.filters import Text, Command
 
 from SetupBot.Setup import bot
 from SetupBot.Setup import dp
@@ -16,3 +16,9 @@ async def cmd_enable_context(callback_query: types.CallbackQuery):
     await DB.del_all_message(callback_query.from_user.id)
     await bot.answer_callback_query(callback_query.id)
     await bot.send_message(callback_query.from_user.id, MESSAGE_RESET_CONTEXT)
+
+
+@dp.message_handler(Command(RESET_COMMAND))
+async def cmd_enable_context_command(message: types.Message):
+    await DB.del_all_message(message.from_user.id)
+    await bot.send_message(message.from_user.id, MESSAGE_RESET_CONTEXT)
