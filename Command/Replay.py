@@ -56,8 +56,6 @@ async def cmd_replay_context(message: types.Message):
     last_message = await DB.read_last_message(user_id)
     message = message.text
 
-    await message.delete()
-
     start_response_message = await message.answer(START_RESPONSE,
                                                   disable_notification=True,
                                                   reply_markup=Keyboards.remove_keyboard)
