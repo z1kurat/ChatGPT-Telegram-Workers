@@ -37,8 +37,8 @@ async def update_last_message(user_id, last_message):
     pool = await get_pool()
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
-            await cur.execute(f"UPDATE User Set last_message = {last_message} WHERE "
-                              f"ID = {user_id};")
+            await cur.execute("UPDATE User Set last_message = '%s' WHERE "
+                              "ID = %s;", last_message, user_id)
         await conn.commit()
 
 
@@ -50,7 +50,7 @@ async def read_last_message(user_id) -> str:
                               f'FROM User WHERE ID = {user_id};')
 
             results = await cur.fetchall()
-            return results[0]
+            return results
 
 
 async def save_message_history(user_id, role, content):
