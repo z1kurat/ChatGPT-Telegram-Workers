@@ -1,5 +1,3 @@
-from typing import List, Dict, Any
-
 from Configs.GPT_Setting import MAX_SAVE_MESSAGE_HISTORY
 
 import aiomysql
@@ -27,7 +25,7 @@ async def read_message_history(user_id) -> list[dict[str, str]]:
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
             await cur.execute(f'SELECT PR_ROLE, CONTENT '
-                              f'FROM MessageHistory{user_id};')
+                              f'FROM MessageHistory{user_id} ORDER BY ID ASC;')
 
             results = await cur.fetchall()
             return [{"role": result[0], "content": result[1]} for result in results]
@@ -38,7 +36,7 @@ async def update_last_message(user_id, last_message):
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
             await cur.execute("UPDATE User Set last_message = %s WHERE ID = %s;", (last_message, user_id))
-        await conn.commit()
+            await conn.commit()
 
 
 async def read_last_message(user_id) -> str:
@@ -58,7 +56,7 @@ async def save_message_history(user_id, role, content):
         async with conn.cursor() as cur:
             await cur.execute("INSERT INTO MessageHistory%s (PR_ROLE, CONTENT) "
                               "VALUES (%s, %s);", (user_id, role, content))
-        await conn.commit()
+            await conn.commit()
 
 
 async def del_old_message(user_id):
@@ -72,7 +70,7 @@ async def del_old_message(user_id):
                 await cur.execute(f"DELETE FROM MessageHistory{user_id} WHERE ID < "
                                   f"(SELECT MAX(ID) - {MAX_SAVE_MESSAGE_HISTORY} FROM "
                                   f"(SELECT ID FROM MessageHistory{user_id}) AS subQuery);")
-        await conn.commit()
+            await conn.commit()
 
 
 async def del_all_message(user_id):
@@ -80,7 +78,7 @@ async def del_all_message(user_id):
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
             await cur.execute(f"TRUNCATE TABLE MessageHistory{user_id};")
-        await conn.commit()
+            await conn.commit()
 
 
 async def create_if_not_exists_message_history(user_id):
@@ -91,7 +89,7 @@ async def create_if_not_exists_message_history(user_id):
                               f"ID INT PRIMARY KEY AUTO_INCREMENT,"
                               f"PR_ROLE VARCHAR(128),"
                               f"CONTENT VARCHAR(4096));")
-        await conn.commit()
+            await conn.commit()
 
 
 async def add_new_user(user_id):
@@ -101,4 +99,4 @@ async def add_new_user(user_id):
             await cur.execute(f"INSERT INTO User (ID) "
                               f"VALUES (%s) ON DUPLICATE KEY UPDATE "
                               f"ID=%s;", (user_id, user_id))
-        await conn.commit()
+            await conn.commit()
