@@ -58,7 +58,7 @@ async def get_response_gpt(user_messages):
 
 async def save_data(user_id, message_text, response):
     await DB.save_message_history(user_id, "user", message_text)
-    await DB.save_message_history(user_id, "system", response)
+    await DB.save_message_history(user_id, "assistant", response)
 
 
 @dp.message_handler(IsSubscriber())
@@ -73,6 +73,9 @@ async def cmd_gpt(message: types.Message):
                                                   reply_markup=Keyboards.remove_keyboard)
 
     user_messages = await get_user_messages(user_id)
+    
+    if user_messages is None:
+        user_messages = []
 
     user_messages.append({"role": "system", "content": DEFAULT_MOD})
     user_messages.append({"role": "user", "content": message_text})
