@@ -55,6 +55,7 @@ async def get_response_gpt(user_messages):
 
     except Exception as err:
         logger_error.error(err.args)
+        logger_history.info(f"{err.args} : {user_messages}")
         return None
 
 
