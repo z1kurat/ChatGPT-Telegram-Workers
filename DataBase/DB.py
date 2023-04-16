@@ -27,8 +27,14 @@ async def read_message_history(user_id) -> list[dict[str, str]]:
             await cur.execute(f'SELECT PR_ROLE, CONTENT '
                               f'FROM MessageHistory{user_id} ORDER BY ID ASC;')
 
-            results = await cur.fetchall()
-            return [{"role": result[0], "content": result[1]} for result in results]
+            result = []
+            history = await cur.fetchall()
+
+            for message in history:
+                if len(message[0]) != 0 and len(message[1]) != 0:
+                    result.append({"role": message[0], "content": message[1]})
+
+            return result
 
 
 async def update_last_message(user_id, last_message):
