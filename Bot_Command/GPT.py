@@ -111,12 +111,12 @@ async def run_gpt(message: types.Message, message_text, user_id):
 
     if response is not None:
         await save_data(user_id, message_text, response)
-        logger_history.info(message.chat.first_name + " - Good!")
+        logger_history.info(f"{message.chat.first_name} + {message.from_user.id} - Good!")
 
     if response is None:
         response = ERROR_RESPONSE_MESSAGE
         keyboard = Keyboards.reset_and_replay_keyboard
-        logger_history.info(message.chat.first_name + " - Fail!")
+        logger_history.info(f"{message.chat.first_name} + {message.from_user.id} - Fail!")
 
     await message.answer(response, reply_markup=keyboard)
 
