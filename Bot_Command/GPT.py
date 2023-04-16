@@ -20,14 +20,12 @@ from Configs.GPT_Setting import STOP
 
 from Configs.Template_Responses import START_RESPONSE
 
-from SetupBot.Setup import dp
 from SetupBot.Setup import logger_error
 from SetupBot.Setup import logger_history
 
 import Keyboards
 
 
-@dp.message_handler(IsSubscriber())
 async def cmd_gpt(message: types.Message):
     await gpt_command(message, message.text)
 

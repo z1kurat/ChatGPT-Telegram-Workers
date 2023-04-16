@@ -1,17 +1,12 @@
 from aiogram import types
-from aiogram.dispatcher.filters import Text, Command
 
 from SetupBot.Setup import bot
-from SetupBot.Setup import dp
 
 from Configs.Template_Responses import MESSAGE_RESET_CONTEXT
 
 from DataBase import DB
 
-from Bot_Command.Command_Name import RESET_COMMAND
 
-
-@dp.callback_query_handler(Text(RESET_COMMAND))
 async def cmd_enable_context(callback_query: types.CallbackQuery):
     await DB.del_all_message(callback_query.from_user.id)
     await DB.set_working(callback_query.from_user.id, False)
@@ -19,7 +14,6 @@ async def cmd_enable_context(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
 
 
-@dp.message_handler(Command(RESET_COMMAND))
 async def cmd_enable_context_command(message: types.Message):
     await DB.del_all_message(message.from_user.id)
     await DB.set_working(message.from_user.id, False)

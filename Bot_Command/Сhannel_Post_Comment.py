@@ -1,15 +1,10 @@
 from aiogram import types
-from aiogram.dispatcher.filters import Command
-
-from Bot_Command.Command_Name import COMMENT_COMMAND
 
 from Bot_Command import GPT
 
-from SetupBot.Setup import dp
 from SetupBot.Setup import bot
 
 
-@dp.message_handler(Command(COMMENT_COMMAND))
 async def cmd_comment_gpt(message: types.Message):
     if message.chat.type != 'supergroup':
         return
