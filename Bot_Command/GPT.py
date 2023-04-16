@@ -27,7 +27,7 @@ from SetupBot.Setup import logger_history
 import Keyboards
 
 
-@dp.message_handler(IsSubscriber())
+@dp.message_handler(IsSubscriber(), content_types=['text'])
 async def cmd_gpt(message: types.Message):
     await gpt_command(message, message.text)
 
