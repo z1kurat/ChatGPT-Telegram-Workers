@@ -25,5 +25,5 @@ def register_handler(dp: aiogram.Dispatcher):
 
     dp.register_callback_query_handler(Replay.cmd_replay_query, filters=(Text(REPLAY_COMMAND)))
     dp.register_callback_query_handler(Reset_Context.cmd_enable_context, filters=(Text(RESET_COMMAND)))
-    
+
     dp.register_message_handler(GPT.cmd_gpt, filters=(IsSubscriber()))
