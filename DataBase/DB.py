@@ -60,11 +60,13 @@ async def get_working(user_id) -> bool:
             await cur.execute(f'SELECT working '
                               f'FROM User WHERE ID = {user_id};')
 
-            results = await cur.fetchall()
+            results = await cur.fetchone()
 
+            print()
             print(results)
+            print()
 
-            return results[0][0]
+            return results[0]
 
 
 async def read_last_message(user_id) -> str:
