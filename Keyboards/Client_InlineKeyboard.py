@@ -6,8 +6,8 @@ from Configs.Template_Responses import MESSAGE_TO_REPLAY
 from Configs.Template_Responses import SUBSCRIBE
 from Configs.Template_Responses import URL_TO_SUBSCRIBE
 
-from Command.Command_Name import RESET_COMMAND
-from Command.Command_Name import REPLAY_COMMAND
+from Bot_Command.Command_Name import RESET_COMMAND
+from Bot_Command.Command_Name import REPLAY_COMMAND
 
 reset_button = InlineKeyboardButton(text=MESSAGE_TO_RESET_CONTEXT, callback_data=RESET_COMMAND)
 replay_button = InlineKeyboardButton(text=MESSAGE_TO_REPLAY, callback_data=REPLAY_COMMAND)

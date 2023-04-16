@@ -7,7 +7,7 @@ from Filters.Chat_Subscriber import IsSubscriber
 
 from Configs.Template_Responses import START_MESSAGE
 
-from Command.Command_Name import START_COMMAND
+from Bot_Command.Command_Name import START_COMMAND
 
 from DataBase import DB
 

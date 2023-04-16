@@ -6,16 +6,15 @@ from SetupBot.Setup import dp
 
 import Keyboards
 
-from Command import GPT
+from Bot_Command import GPT
+from Bot_Command.Command_Name import REPLAY_COMMAND
 
 from Configs.Template_Responses import AWAIT_RESPONSE_MESSAGE, NONE_LAST_MESSAGE
 
 from DataBase import DB
 
-from Command.Command_Name import REPLAY_COMMAND
 
-
-@dp.message_handler(commands=REPLAY_COMMAND)
+@dp.message_handler(Command(REPLAY_COMMAND))
 async def cmd_replay_command(message: types.Message):
     user_id = message.from_user.id
     last_message = await DB.read_last_message(user_id)

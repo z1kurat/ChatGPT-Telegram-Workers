@@ -8,7 +8,7 @@ from Configs.Template_Responses import MESSAGE_RESET_CONTEXT
 
 from DataBase import DB
 
-from Command.Command_Name import RESET_COMMAND
+from Bot_Command.Command_Name import RESET_COMMAND
 
 
 @dp.callback_query_handler(Text(RESET_COMMAND))

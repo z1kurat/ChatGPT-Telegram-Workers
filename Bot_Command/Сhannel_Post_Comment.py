@@ -1,9 +1,9 @@
 from aiogram import types
 from aiogram.dispatcher.filters import Command
 
-from Command.Command_Name import COMMENT_COMMAND
+from Bot_Command.Command_Name import COMMENT_COMMAND
 
-from Command import GPT
+from Bot_Command import GPT
 
 from SetupBot.Setup import dp
 from SetupBot.Setup import bot
