@@ -86,10 +86,10 @@ async def gpt_command(message: types.Message, message_text, update_last_message=
         await message.answer(AWAIT_RESPONSE_MESSAGE, disable_notification=True, reply_markup=Keyboards.remove_keyboard)
         return
 
+    await run_gpt(message, message_text, user_id)
+
     if update_last_message:
         await DB.update_last_message(user_id, message_text)
-
-    await run_gpt(message, message_text, user_id)
 
     await DB.set_working(user_id, False)
 
@@ -107,9 +107,6 @@ async def run_gpt(message: types.Message, message_text, user_id):
         current_message.append(user_messages)
 
     current_message.append({"role": "user", "content": message_text})
-
-    print(current_message)
-
     response = await get_response_gpt(current_message)
 
     await start_response_message.delete()
