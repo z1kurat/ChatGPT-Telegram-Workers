@@ -110,7 +110,7 @@ async def create_if_not_exists_message_history(user_id):
             await cur.execute(f"CREATE TABLE IF NOT EXISTS MessageHistory{user_id} ("
                               f"ID INT PRIMARY KEY AUTO_INCREMENT,"
                               f"PR_ROLE VARCHAR(128),"
-                              f"CONTENT VARCHAR(4096));")
+                              f"CONTENT VARCHAR(8192));")
             await conn.commit()
 
 
