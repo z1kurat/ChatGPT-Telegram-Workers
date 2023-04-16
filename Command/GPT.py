@@ -27,6 +27,11 @@ from SetupBot.Setup import logger_history
 import Keyboards
 
 
+@dp.message_handler(IsSubscriber())
+async def cmd_gpt(message: types.Message):
+    await gpt_command(message, message.text)
+
+
 async def get_user_messages(user_id) -> list[dict[str, str]]:
     user_messages = await DB.read_message_history(user_id)
 
@@ -62,46 +67,59 @@ async def save_data(user_id, message_text, response):
     await DB.save_message_history(user_id, "assistant", response)
 
 
-@dp.message_handler(IsSubscriber())
-async def cmd_gpt(message: types.Message):
-    message_text = message.text
-    user_id = message.from_user.id
-
+async def prepare_for_work(user_id) -> bool:
     is_working = await DB.get_working(user_id)
 
     if is_working:
-        await message.answer(AWAIT_RESPONSE_MESSAGE, disable_notification=True)
-        return
+        return False
 
     await DB.set_working(user_id, True)
 
-    await DB.update_last_message(user_id, message_text)
+    return True
 
+
+async def gpt_command(message: types.Message, message_text, update_last_message=True):
+    user_id = message.from_user.id
+    ready_to_work = await prepare_for_work(user_id)
+
+    if not ready_to_work:
+        await message.answer(AWAIT_RESPONSE_MESSAGE, disable_notification=True, reply_markup=Keyboards.remove_keyboard)
+        return
+
+    if update_last_message:
+        await DB.update_last_message(user_id, message_text)
+
+    await run_gpt(message, message_text, user_id)
+
+    await DB.set_working(user_id, False)
+
+
+async def run_gpt(message: types.Message, message_text, user_id):
     start_response_message = await message.answer(START_RESPONSE,
                                                   disable_notification=True,
                                                   reply_markup=Keyboards.remove_keyboard)
 
+    current_message = [{"role": "system", "content": DEFAULT_MOD}]
+
     user_messages = await get_user_messages(user_id)
 
-    if user_messages is None:
-        user_messages = []
+    if user_messages is not None:
+        current_message.append(user_messages)
 
-    user_messages.append({"role": "system", "content": DEFAULT_MOD})
-    user_messages.append({"role": "user", "content": message_text})
+    current_message.append({"role": "user", "content": message_text})
 
-    response = await get_response_gpt(user_messages)
+    response = await get_response_gpt(current_message)
 
     await start_response_message.delete()
+    keyboard = Keyboards.reset_context_keyboard
+
+    if response is not None:
+        await save_data(user_id, message_text, response)
 
     if response is None:
-        await message.answer(ERROR_RESPONSE_MESSAGE, reply_markup=Keyboards.reset_and_replay_keyboard)
-        await DB.set_working(user_id, False)
-        return
+        response = ERROR_RESPONSE_MESSAGE
+        keyboard = Keyboards.reset_and_replay_keyboard
 
-    await save_data(user_id, message_text, response)
-
-    await DB.set_working(user_id, False)
-
-    await message.answer(response, reply_markup=Keyboards.reset_context_keyboard)
+    await message.answer(response, reply_markup=keyboard)
 
     logger_history.info(message.chat.first_name + " - Good!")
