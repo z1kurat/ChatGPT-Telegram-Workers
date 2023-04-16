@@ -61,6 +61,8 @@ async def get_working(user_id) -> bool:
                               f'FROM User WHERE ID = {user_id};')
 
             results = await cur.fetchall()
+
+            print(results)
             return results[0][0]
 
 
