@@ -107,7 +107,7 @@ async def run_gpt(message: types.Message, message_text, user_id):
         current_message.append(user_messages)
 
     current_message.append({"role": "user", "content": message_text})
-
+    print(current_message)
     response = await get_response_gpt(current_message)
 
     await start_response_message.delete()

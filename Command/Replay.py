@@ -48,5 +48,5 @@ async def cmd_replay_query(callback_query: types.CallbackQuery):
     await GPT.run_gpt(message, last_message, user_id)
 
     await bot.answer_callback_query(callback_query.id)
-    
+
     await DB.set_working(user_id, False)
