@@ -103,11 +103,13 @@ async def run_gpt(message: types.Message, message_text, user_id):
 
     user_messages = await get_user_messages(user_id)
 
-    if user_messages is not None:
+    if user_messages is not None and len(user_messages) != 0:
         current_message.append(user_messages)
 
     current_message.append({"role": "user", "content": message_text})
+
     print(current_message)
+
     response = await get_response_gpt(current_message)
 
     await start_response_message.delete()
