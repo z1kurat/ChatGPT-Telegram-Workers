@@ -61,11 +61,6 @@ async def get_working(user_id) -> bool:
                               f'FROM User WHERE ID = {user_id};')
 
             results = await cur.fetchone()
-
-            print()
-            print(results)
-            print()
-
             return results[0]
 
 
@@ -76,8 +71,13 @@ async def read_last_message(user_id) -> str:
             await cur.execute(f'SELECT last_message '
                               f'FROM User WHERE ID = {user_id};')
 
-            results = await cur.fetchall()
-            return results[0][0]
+            results = await cur.fetchone()
+
+            print()
+            print(results)
+            print()
+
+            return results[0]
 
 
 async def save_message_history(user_id, role, content):
