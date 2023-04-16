@@ -15,7 +15,7 @@ from DataBase import DB
 from Command.Command_Name import REPLAY_COMMAND
 
 
-@dp.message_handler(Command(REPLAY_COMMAND))
+@dp.message_handler(commands=REPLAY_COMMAND)
 async def cmd_replay_command(message: types.Message):
     user_id = message.from_user.id
     last_message = await DB.read_last_message(user_id)
