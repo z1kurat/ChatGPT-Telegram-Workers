@@ -54,8 +54,8 @@ async def get_response_gpt(user_messages):
         return completion.json()["choices"][0]["message"]["content"]
 
     except Exception as err:
-        logger_error.error(err.args)
-        logger_history.info(f"{err.args} : {user_messages}")
+        logger_error.error(f"{err.args} : {user_messages[-1]}")
+        logger_history.info(f"{err.args} : {user_messages[-1]}")
         return None
 
 
