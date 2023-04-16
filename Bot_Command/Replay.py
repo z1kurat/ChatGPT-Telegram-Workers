@@ -14,8 +14,8 @@ from Configs.Template_Responses import AWAIT_RESPONSE_MESSAGE, NONE_LAST_MESSAGE
 from DataBase import DB
 
 
-@dp.message_handler(Command(REPLAY_COMMAND))
-async def cmd_replay_command(message: types.Message):
+@dp.message_handler(commands=['replay'])
+async def replay_handler(message: types.Message):
     user_id = message.from_user.id
     last_message = await DB.read_last_message(user_id)
 
