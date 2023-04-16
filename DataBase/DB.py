@@ -28,6 +28,7 @@ async def read_message_history(user_id) -> list[dict[str, str]]:
                               f'FROM MessageHistory{user_id} ORDER BY ID ASC;')
 
             results = await cur.fetchall()
+            print(results)
             return [{"role": result[0], "content": result[1]} for result in results]
 
 

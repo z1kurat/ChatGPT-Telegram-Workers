@@ -108,7 +108,7 @@ async def run_gpt(message: types.Message, message_text, user_id):
 
     current_message.append({"role": "user", "content": message_text})
     response = await get_response_gpt(current_message)
-
+    print(current_message)
     await start_response_message.delete()
     keyboard = Keyboards.reset_context_keyboard
 
