@@ -63,6 +63,7 @@ async def get_working(user_id) -> bool:
             results = await cur.fetchall()
 
             print(results)
+
             return results[0][0]
 
 
