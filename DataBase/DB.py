@@ -64,7 +64,7 @@ async def get_working(user_id) -> bool:
             return results[0]
 
 
-async def read_last_message(user_id) -> str:
+async def read_last_message(user_id):
     pool = await get_pool()
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
@@ -73,9 +73,8 @@ async def read_last_message(user_id) -> str:
 
             results = await cur.fetchone()
 
-            print()
-            print(results)
-            print()
+            if results is None:
+                return None
 
             return results[0]
 

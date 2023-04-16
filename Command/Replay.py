@@ -5,7 +5,7 @@ import Keyboards
 
 from Command import GPT
 
-from Configs.Template_Responses import AWAIT_RESPONSE_MESSAGE
+from Configs.Template_Responses import AWAIT_RESPONSE_MESSAGE, NONE_LAST_MESSAGE
 
 from SetupBot.Setup import dp
 from SetupBot.Setup import bot
@@ -19,6 +19,10 @@ from Command.Command_Name import REPLAY_COMMAND
 async def cmd_replay_command(message: types.Message):
     user_id = message.from_user.id
     last_message = await DB.read_last_message(user_id)
+
+    if last_message is None:
+        await message.answer(NONE_LAST_MESSAGE, disable_notification=True, reply_markup=Keyboards.remove_keyboard)
+        return
 
     ready_to_work = await GPT.prepare_for_work(user_id)
 
@@ -36,6 +40,10 @@ async def cmd_replay_query(callback_query: types.CallbackQuery):
     message = callback_query.message
     user_id = message.from_user.id
     last_message = await DB.read_last_message(user_id)
+
+    if last_message is None:
+        await message.answer(NONE_LAST_MESSAGE, disable_notification=True, reply_markup=Keyboards.remove_keyboard)
+        return
 
     ready_to_work = await GPT.prepare_for_work(user_id)
 
