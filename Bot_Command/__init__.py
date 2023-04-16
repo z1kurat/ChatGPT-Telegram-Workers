@@ -18,7 +18,7 @@ from Filters.Chat_Subscriber import IsSubscriber
 
 
 def register_handler(dp: aiogram.Dispatcher):
-    dp.register_message_handler(Start.cmd_start, custom_filters=[Command(START_COMMAND), IsSubscriber()])
+    dp.register_message_handler(Start.cmd_start, Command(START_COMMAND), IsSubscriber())
     dp.register_message_handler(Replay.cmd_replay_command, filters=(Command(REPLAY_COMMAND), IsSubscriber()))
     dp.register_message_handler(Reset_Context.cmd_enable_context_command, filters=(Command(RESET_COMMAND), IsSubscriber()))
     dp.register_message_handler(Сhannel_Post_Comment.cmd_comment_gpt, filters=(Command(COMMENT_COMMAND), IsSubscriber()))
