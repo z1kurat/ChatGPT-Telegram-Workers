@@ -66,7 +66,6 @@ async def read_last_message(user_id):
                               f'FROM User WHERE ID = {user_id};')
 
             results = await cur.fetchone()
-            print(results)
             if results is None:
                 return None
 

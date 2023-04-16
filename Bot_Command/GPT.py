@@ -2,8 +2,6 @@ import openai_async
 
 from aiogram import types
 
-from Filters.Chat_Subscriber import IsSubscriber
-
 from DataBase import DB
 
 from Configs.API import OPENAI_KEY
