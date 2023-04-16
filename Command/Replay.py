@@ -1,14 +1,14 @@
 from aiogram import types
 from aiogram.dispatcher.filters import Text, Command
 
+from SetupBot.Setup import bot
+from SetupBot.Setup import dp
+
 import Keyboards
 
 from Command import GPT
 
 from Configs.Template_Responses import AWAIT_RESPONSE_MESSAGE, NONE_LAST_MESSAGE
-
-from SetupBot.Setup import dp
-from SetupBot.Setup import bot
 
 from DataBase import DB
 
@@ -38,7 +38,8 @@ async def cmd_replay_command(message: types.Message):
 @dp.callback_query_handler(Text(REPLAY_COMMAND))
 async def cmd_replay_query(callback_query: types.CallbackQuery):
     message = callback_query.message
-    user_id = message.from_user.id
+    user_id = callback_query.message.from_user.id
+
     last_message = await DB.read_last_message(user_id)
 
     if last_message is None:
