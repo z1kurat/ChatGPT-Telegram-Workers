@@ -15,7 +15,7 @@ import Keyboards
 
 
 async def gpt(message: types.Message, message_text):
-    user_id = message.from_user.id
+    user_id = message.chat.id
     start_message = await message.answer(START_RESPONSE,
                                          disable_notification=True,
                                          reply_markup=Keyboards.remove_keyboard)

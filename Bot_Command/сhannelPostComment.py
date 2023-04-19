@@ -18,13 +18,11 @@ async def comment_gpt_cmd(message: types.Message):
 
     response = await chatComplete.get_response_gpt(user_messages)
 
-    chat_id = message.chat.id
-    post_id = message.reply_to_message.message_id
-
     if response is None:
         response = ERROR_RESPONSE_MESSAGE
 
-    await bot.send_message(chat_id, response, reply_to_message_id=post_id, disable_notification=True)
+    await bot.send_message(message.chat.id, response, reply_to_message_id=message.reply_to_message.message_id,
+                           disable_notification=True)
 
     await message.delete()
 

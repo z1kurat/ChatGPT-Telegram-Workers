@@ -11,16 +11,18 @@ from Configs.templateResponses import NONE_LAST_MESSAGE
 from DataBase import DB
 
 
-async def replay(message: types.Message, user_id, is_callback=False, callback_id=-1):
+async def replay(message: types.Message, is_callback=False, callback_id=-1):
+    user_id = message.chat.id
     last_message = await DB.read_last_message(user_id)
-
-    if last_message is None:
-        await message.answer(NONE_LAST_MESSAGE, disable_notification=True, reply_markup=Keyboards.remove_keyboard)
-        return
 
     if is_callback:
         await bot.answer_callback_query(callback_id)
         await message.delete()
+
+    if last_message is None:
+        await bot.send_message(user_id, NONE_LAST_MESSAGE, disable_notification=True,
+                               reply_markup=Keyboards.remove_keyboard)
+        return
 
     await run.gpt(message, last_message)
 
@@ -28,12 +30,8 @@ async def replay(message: types.Message, user_id, is_callback=False, callback_id
 
 
 async def replay_callback(callback_query: types.CallbackQuery):
-    message = callback_query.message
-    user_id = callback_query.from_user.id
-    callback_id = callback_query.id
-    await replay(message, user_id, True, callback_id)
+    await replay(callback_query.message, True, callback_query.id)
 
 
 async def replay_cmd(message: types.Message):
-    user_id = message.from_user.id
-    await replay(message, user_id, False)
+    await replay(message, False)
