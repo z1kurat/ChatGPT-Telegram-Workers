@@ -24,5 +24,5 @@ async def reset_context_callback(callback_query: types.CallbackQuery):
 
 
 async def reset_context_cmd(message: types.Message):
-    await reset_conntext(message.chat.id, False)
+    await reset_conntext(message, False)
 
