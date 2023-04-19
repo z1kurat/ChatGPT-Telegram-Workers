@@ -1,5 +1,7 @@
 from aiogram import types
 
+from SetupBot.Setup import bot
+
 from aiogram.dispatcher.filters import BoundFilter
 
 from Configs.templateResponses import AWAIT_RESPONSE_MESSAGE
@@ -15,7 +17,7 @@ class IsBotFree(BoundFilter):
         is_bot_work = await DB.get_work_state(user_id)
 
         if is_bot_work:
-            await message.answer(AWAIT_RESPONSE_MESSAGE, reply_markup=Keyboards.remove_keyboard)
+            await bot.send_message(user_id, AWAIT_RESPONSE_MESSAGE, reply_markup=Keyboards.remove_keyboard)
             return False
 
         await DB.set_work_state(user_id, True)
