@@ -20,10 +20,7 @@ async def reset_conntext(message: types.Message, is_callback=False, callback_id=
 
 
 async def reset_context_callback(callback_query: types.CallbackQuery):
-    message = callback_query.message
-    callback_id = callback_query.id
-
-    await reset_conntext(message, True, callback_id)
+    await reset_conntext(callback_query.message, True, callback_query.id)
 
 
 async def reset_context_cmd(message: types.Message):
