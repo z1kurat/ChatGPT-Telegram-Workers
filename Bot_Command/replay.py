@@ -31,6 +31,7 @@ async def replay(message: types.Message, is_callback=False, callback_id=-1):
 async def replay_callback(callback_query: types.CallbackQuery):
     message = callback_query.message
     callback_id = callback_query.id
+    print("asd")
     await replay(message, True, callback_id)
 
 
