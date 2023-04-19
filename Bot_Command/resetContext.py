@@ -11,7 +11,7 @@ async def reset_conntext(message: types.Message, is_callback=False, callback_id=
     user_id = message.from_user.id
 
     await DB.delete_user_history(user_id)
-    await bot.send_message(user_id, MESSAGE_RESET_CONTEXT)
+    await message.answer(MESSAGE_RESET_CONTEXT)
 
     if is_callback:
         await bot.answer_callback_query(callback_id)
