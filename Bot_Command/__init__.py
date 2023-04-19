@@ -21,7 +21,7 @@ from Filters.chatSuperGroup import IsChatSuperGroup
 
 
 def register_handler(dp: aiogram.Dispatcher):
-    dp.register_message_handler(start.cmd_start, Command(START_COMMAND), IsChatPrivate(), IsBotFree())
+    dp.register_message_handler(start.cmd_start, Command(START_COMMAND), IsChatPrivate())
     dp.register_message_handler(replay.replay_cmd, Command(REPLAY_COMMAND), IsChatPrivate(), IsSubscriber(), IsBotFree())
     dp.register_message_handler(resetContext.reset_context_cmd, Command(RESET_COMMAND), IsChatPrivate(), IsSubscriber(), IsBotFree())
     dp.register_message_handler(сhannelPostComment.comment_gpt_cmd, Command(COMMENT_COMMAND), IsChatSuperGroup())
