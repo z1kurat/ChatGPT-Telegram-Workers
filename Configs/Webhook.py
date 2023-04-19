@@ -1,5 +1,5 @@
-from Server import HOST
-from Server import PORT
+from server import HOST
+from server import PORT
 
 from API import TELEGRAM_BOT_TOKEN
 

@@ -1,6 +1,6 @@
 from aiogram import types
 
-from Configs.Template_Responses import START_MESSAGE
+from Configs.templateResponses import START_MESSAGE
 
 from DataBase import DB
 

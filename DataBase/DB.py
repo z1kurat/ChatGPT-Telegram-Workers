@@ -1,14 +1,15 @@
-from Configs.GPT_Setting import MAX_SAVE_MESSAGE_HISTORY
+from Configs.parametersGPT import MAX_SAVE_MESSAGE_HISTORY
 
 import aiomysql
 
-from Configs.DB_PARAMETERS import HOST
-from Configs.DB_PARAMETERS import USER
-from Configs.DB_PARAMETERS import PORT
-from Configs.DB_PARAMETERS import PASSWORD
-from Configs.DB_PARAMETERS import NAME_DB
+from Configs.parametersDB import HOST
+from Configs.parametersDB import USER
+from Configs.parametersDB import PORT
+from Configs.parametersDB import PASSWORD
+from Configs.parametersDB import NAME_DB
 
 
+# !toDO: decompose
 async def get_pool():
     pool = await aiomysql.create_pool(host=HOST,
                                       port=PORT,
@@ -39,15 +40,15 @@ async def update_last_message(user_id, last_message):
             await conn.commit()
 
 
-async def set_working(user_id, is_working):
+async def set_work_state(user_id, work_state):
     pool = await get_pool()
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
-            await cur.execute("UPDATE User Set working = %s WHERE ID = %s;", (is_working, user_id))
+            await cur.execute("UPDATE User Set working = %s WHERE ID = %s;", (work_state, user_id))
             await conn.commit()
 
 
-async def get_working(user_id) -> bool:
+async def get_work_state(user_id) -> bool:
     pool = await get_pool()
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
@@ -95,7 +96,7 @@ async def del_old_message(user_id):
             await conn.commit()
 
 
-async def del_all_message(user_id):
+async def delete_user_history(user_id):
     pool = await get_pool()
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
