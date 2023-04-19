@@ -20,6 +20,8 @@ async def gpt(message: types.Message, message_text):
                                          disable_notification=True,
                                          reply_markup=Keyboards.remove_keyboard)
 
+    await saveUserParameters.save_last_message(user_id, message_text)
+
     is_dialog_correct, current_dialog = await collectUserDialog.get_user_dialog(user_id, message_text)
 
     if not is_dialog_correct:
