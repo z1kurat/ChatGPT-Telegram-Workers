@@ -1,6 +1,6 @@
 from aiogram import types
 
-from utilitesGPT.chatComplete import get_response_gpt
+from utilitesGPT import chatComplete
 
 from Configs.templateResponses import ERROR_RESPONSE_MESSAGE
 
@@ -16,7 +16,7 @@ async def comment_gpt_cmd(message: types.Message):
     user_messages = [{"role": "system", "content": DEFAULT_POST_MOD},
                      {"role": "user", "content": message_text}]
 
-    response = await get_response_gpt(user_messages)
+    response = await chatComplete.get_response_gpt(user_messages)
 
     chat_id = message.chat.id
     post_id = message.reply_to_message.message_id
