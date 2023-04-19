@@ -11,8 +11,7 @@ from Configs.templateResponses import NONE_LAST_MESSAGE
 from DataBase import DB
 
 
-async def replay(message: types.Message, is_callback=False, callback_id=-1):
-    user_id = message.from_user.id
+async def replay(message: types.Message, user_id, is_callback=False, callback_id=-1):
     last_message = await DB.read_last_message(user_id)
 
     if last_message is None:
@@ -30,10 +29,11 @@ async def replay(message: types.Message, is_callback=False, callback_id=-1):
 
 async def replay_callback(callback_query: types.CallbackQuery):
     message = callback_query.message
+    user_id = callback_query.from_user.id
     callback_id = callback_query.id
-    print("asd")
-    await replay(message, True, callback_id)
+    await replay(message, user_id, True, callback_id)
 
 
 async def replay_cmd(message: types.Message):
-    await replay(message)
+    user_id = message.from_user.id
+    await replay(message, user_id, False)

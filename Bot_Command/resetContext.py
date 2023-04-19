@@ -9,7 +9,7 @@ from DataBase import DB
 
 async def reset_conntext(user_id, is_callback=False, callback_id=-1):
     await DB.delete_user_history(user_id)
-    await bot.send_message(user_id, MESSAGE_RESET_CONTEXT)
+    await bot.send_message(user_id, MESSAGE_RESET_CONTEXT, disable_notification=True)
 
     if is_callback:
         await bot.answer_callback_query(callback_id)
