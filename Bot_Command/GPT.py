@@ -1,6 +1,6 @@
 from aiogram import types
 
-from utilitesGPT import run
+from Bot_Command.utilitesGPT import run
 
 
 async def cmd_gpt(message: types.Message):

@@ -1,6 +1,6 @@
 from aiogram import types
 
-from utilitesGPT import chatComplete
+from Bot_Command.utilitesGPT import chatComplete
 
 from Configs.templateResponses import ERROR_RESPONSE_MESSAGE
 
