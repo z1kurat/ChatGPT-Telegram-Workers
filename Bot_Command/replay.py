@@ -29,7 +29,9 @@ async def replay(message: types.Message, is_callback=False, callback_id=-1):
 
 
 async def replay_callback(callback_query: types.CallbackQuery):
-    await replay(callback_query.message, True, callback_query.id)
+    message = callback_query.message
+    callback_id = callback_query.id
+    await replay(message, True, callback_id)
 
 
 async def replay_cmd(message: types.Message):
