@@ -21,12 +21,12 @@ from Filters.chatSuperGroup import IsChatSuperGroup
 
 
 def register_handler(dp: aiogram.Dispatcher):
-    dp.register_message_handler(start.cmd_start, IsBotFree(), Command(START_COMMAND), IsChatPrivate())
-    dp.register_message_handler(replay.replay_cmd, IsBotFree(), Command(REPLAY_COMMAND), IsChatPrivate(), IsSubscriber())
-    dp.register_message_handler(resetContext.reset_context_cmd, IsBotFree(), Command(RESET_COMMAND), IsChatPrivate(), IsSubscriber())
+    dp.register_message_handler(start.cmd_start, Command(START_COMMAND), IsChatPrivate(), IsBotFree())
+    dp.register_message_handler(replay.replay_cmd, Command(REPLAY_COMMAND), IsChatPrivate(), IsSubscriber(), IsBotFree())
+    dp.register_message_handler(resetContext.reset_context_cmd, Command(RESET_COMMAND), IsChatPrivate(), IsSubscriber(), IsBotFree())
     dp.register_message_handler(сhannelPostComment.comment_gpt_cmd, Command(COMMENT_COMMAND), IsChatSuperGroup())
 
-    dp.register_callback_query_handler(replay.replay_callback, IsBotFree(), Text(REPLAY_COMMAND), IsChatPrivate(), IsSubscriber())
-    dp.register_callback_query_handler(resetContext.reset_context_callback, IsBotFree(), Text(RESET_COMMAND), IsChatPrivate(), IsSubscriber())
+    dp.register_callback_query_handler(replay.replay_callback, Text(REPLAY_COMMAND), IsChatPrivate(), IsSubscriber(), IsBotFree())
+    dp.register_callback_query_handler(resetContext.reset_context_callback, Text(RESET_COMMAND), IsChatPrivate(), IsSubscriber(), IsBotFree())
 
-    dp.register_message_handler(GPT.cmd_gpt, IsBotFree(), IsChatPrivate(), IsSubscriber())
+    dp.register_message_handler(GPT.cmd_gpt, IsChatPrivate(), IsSubscriber(), IsBotFree())
