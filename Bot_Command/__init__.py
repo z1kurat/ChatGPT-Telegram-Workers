@@ -26,7 +26,7 @@ def register_handler(dp: aiogram.Dispatcher):
     dp.register_message_handler(resetContext.reset_context_cmd, Command(RESET_COMMAND), IsChatPrivate(), IsSubscriber(), IsBotFree())
     dp.register_message_handler(сhannelPostComment.comment_gpt_cmd, Command(COMMENT_COMMAND), IsChatSuperGroup())
 
-    dp.register_callback_query_handler(replay.replay_callback, Text(REPLAY_COMMAND), IsChatPrivate(), IsSubscriber(), IsBotFree())
-    dp.register_callback_query_handler(resetContext.reset_context_callback, Text(RESET_COMMAND), IsChatPrivate(), IsSubscriber(), IsBotFree())
+    dp.register_callback_query_handler(replay.replay_callback, Text(REPLAY_COMMAND), IsBotFree())
+    dp.register_callback_query_handler(resetContext.reset_context_callback, Text(RESET_COMMAND), IsBotFree())
 
     dp.register_message_handler(GPT.cmd_gpt, IsChatPrivate(), IsSubscriber(), IsBotFree())
