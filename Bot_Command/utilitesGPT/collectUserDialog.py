@@ -11,8 +11,8 @@ async def get_user_dialog(user_id, message_text) -> Tuple[bool, list[dict[str, s
     current_dialog = [{"role": "system", "content": DEFAULT_MOD}]
 
     user_messages_history = await DB.read_message_history(user_id)
-
-    if is_user_messages_history_correct(user_messages_history):
+    correct_user_history = await is_user_messages_history_correct(user_messages_history)
+    if correct_user_history:
         current_dialog.extend(user_messages_history)
     else:
         is_dialog_correct = False
