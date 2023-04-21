@@ -13,7 +13,7 @@ import Keyboards
 
 class IsBotFree(BoundFilter):
     async def check(self, message: types.Message):
-        user_id = message.chat.id
+        user_id = message.from_user.id
         is_bot_work = await DB.get_work_state(user_id)
 
         if is_bot_work:
