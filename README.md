@@ -1,2 +1,2 @@
 # GPT
- Telegram bot with GPT
+Telegram bot with GPT... Bruce lox...
