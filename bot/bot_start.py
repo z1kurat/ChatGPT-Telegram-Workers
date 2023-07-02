@@ -18,7 +18,7 @@ async def start_bot():
     logging.basicConfig(
         level=logging.INFO,
         format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
-        #filename='../bot_history'
+        filename='../bot_history'
     )
     logger.info("Starting bot")
 
