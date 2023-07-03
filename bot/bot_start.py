@@ -10,6 +10,8 @@ from bot.cache import Cache
 from bot.structures import conf, set_bot_commands
 from bot.data_base.data_base import create_session_maker
 
+from dotenv import load_dotenv
+
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +23,8 @@ async def start_bot():
         filename='../bot_history'
     )
     logger.info("Starting bot")
+
+    load_dotenv()
 
     bot = Bot(token=conf.bot.token)
     cache: Cache = Cache()
