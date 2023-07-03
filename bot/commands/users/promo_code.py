@@ -1,8 +1,11 @@
+import logging
+
 from aiogram import types, Router, Bot, F
 from aiogram.enums import ChatType
 from aiogram.filters import Text
 from aiogram.fsm.context import FSMContext
 
+from bot.bot_start import logger
 from bot.commands.commandName import PROMO_CODE_COMMAND
 from bot.data_base.models import Users
 from bot.data_base.repositories import PromoCodeRepo, UsedPromoCodeRepo
@@ -48,22 +51,25 @@ async def cmd_promo_code(
         state: FSMContext
 ):
     """ Use users promo code """
-    promo_code = message.text
-    user_id = message.from_user.id
-    keyboard = promo_code_back_menu_keyboard
+    try:
+        promo_code = message.text
+        user_id = message.from_user.id
+        keyboard = promo_code_back_menu_keyboard
 
-    status, token = await check_users_promo_code(promo_code, user_id, promo_codes, used_promo_codes)
+        status, token = await check_users_promo_code(promo_code, user_id, promo_codes, used_promo_codes)
 
-    if status == PromoCodeStatus.ACTIVE:
-        await update_used_promo_code(promo_code, user_id, used_promo_codes)
-        await state.clear()
+        if status == PromoCodeStatus.ACTIVE:
+            await update_used_promo_code(promo_code, user_id, used_promo_codes)
+            await state.clear()
 
-        user.balance += token
+            user.balance += token
 
-        keyboard = None
+            keyboard = None
 
-    result_message = await get_message_by_promo_code_status(status)
+        result_message = await get_message_by_promo_code_status(status)
 
-    await bot.send_message(chat_id=message.from_user.id,
-                           text=result_message.format(token),
-                           reply_markup=keyboard)
+        await bot.send_message(chat_id=message.from_user.id,
+                               text=result_message.format(token),
+                               reply_markup=keyboard)
+    except Exception as e:
+        logger.ERROR(e)
