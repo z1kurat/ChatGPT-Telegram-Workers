@@ -24,7 +24,8 @@ async def start_bot():
     )
     logger.info("Starting bot")
 
-    load_dotenv()
+    env_path = "/root/GPT/.env"
+    load_dotenv(env_path)
 
     bot = Bot(token=conf.bot.token)
     cache: Cache = Cache()
