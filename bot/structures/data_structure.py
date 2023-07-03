@@ -1,6 +1,7 @@
 from typing import Callable, TypedDict
 
 from aiogram import Bot
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.structures.enum.role import Role

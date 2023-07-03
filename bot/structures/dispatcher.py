@@ -1,4 +1,4 @@
-import os
+from os import getenv
 
 from typing import Optional
 
@@ -33,11 +33,11 @@ def get_dispatcher(
 
     dp.message.outer_middleware(EndOfRequestsMiddleware())
     dp.message.outer_middleware(ThrottlingMiddleware())
-    dp.message.outer_middleware(SubscribersMiddleware(os.getenv("CHANNEL_ID")))
+    dp.message.outer_middleware(SubscribersMiddleware(int(getenv("CHANNEL_ID"))))
 
     dp.callback_query.outer_middleware(EndOfRequestsMiddleware())
     dp.callback_query.outer_middleware(ThrottlingMiddleware())
-    dp.callback_query.outer_middleware(SubscribersMiddleware(os.getenv("CHANNEL_ID")))
+    dp.callback_query.outer_middleware(SubscribersMiddleware(int(getenv("CHANNEL_ID"))))
 
     dp.message.middleware(ChatActionMiddleware())
     dp.message.middleware(RegistrationsMiddleware())

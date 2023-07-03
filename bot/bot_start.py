@@ -10,8 +10,6 @@ from bot.cache import Cache
 from bot.structures import conf, set_bot_commands
 from bot.data_base.data_base import create_session_maker
 
-from dotenv import load_dotenv
-
 
 logger = logging.getLogger(__name__)
 
@@ -20,12 +18,9 @@ async def start_bot():
     logging.basicConfig(
         level=logging.INFO,
         format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
-        filename='../bot_history'
+        #filename='../bot_history'
     )
     logger.info("Starting bot")
-
-    env_path = "/root/GPT/.env"
-    load_dotenv(dotenv_path=env_path)
 
     bot = Bot(token=conf.bot.token)
     cache: Cache = Cache()
