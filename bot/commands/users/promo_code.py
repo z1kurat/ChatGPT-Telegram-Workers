@@ -1,11 +1,8 @@
-import logging
-
 from aiogram import types, Router, Bot, F
 from aiogram.enums import ChatType
 from aiogram.filters import Text
 from aiogram.fsm.context import FSMContext
 
-from bot.bot_start import logger
 from bot.commands.commandName import PROMO_CODE_COMMAND
 from bot.data_base.models import Users
 from bot.data_base.repositories import PromoCodeRepo, UsedPromoCodeRepo
@@ -72,4 +69,4 @@ async def cmd_promo_code(
                                text=result_message.format(token),
                                reply_markup=keyboard)
     except Exception as e:
-        logger.ERROR(e)
+        print(e)
