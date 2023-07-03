@@ -20,6 +20,18 @@ async def start_bot():
         format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
         #filename='../bot_history'
     )
+
+    # Создаем обработчик ConsoleHandler и задаем уровень логирования
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)
+
+    # Создаем форматировщик сообщений и добавляем его в обработчик
+    formatter = logging.Formatter(u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s')
+    console_handler.setFormatter(formatter)
+
+    # Добавляем обработчик к логгеру
+    logger.addHandler(console_handler)
+
     logger.info("Starting bot")
 
     bot = Bot(token=conf.bot.token)
