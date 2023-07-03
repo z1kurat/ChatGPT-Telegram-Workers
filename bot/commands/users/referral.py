@@ -77,4 +77,4 @@ async def cmd_referral_add_by_code(message: types.Message, user: Users, db: Data
                                reply_markup=referral_back_menu_keyboard)
         return
 
-    await state.set_state(OrderReferralRegistrations.referral_registrations)
+    await state.clear()

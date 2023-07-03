@@ -7,7 +7,6 @@ from bot.filters import ChatTypeFilter
 from bot.middlewares import RoleMiddleware, BalanceMiddleware
 from bot.parameters.bot_parameters import PARSE_MODE
 from bot.parameters.responses_template import START_RESPONSE
-from bot.structures import Role
 from bot.utils.gpt import get_chat_response, debiting_tokens
 from bot.keyboards.context import reset_context_keyboard, reset_and_replay_keyboard
 
