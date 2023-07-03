@@ -15,7 +15,7 @@ async def check_users_promo_code(
         used_promo_codes: UsedPromoCodeRepo
 ) -> [PromoCodeStatus, Union[int, None]]:
     """ Checking the availability of a promo code in the database """
-    promo_code: PromoCodes = await promo_codes.get_by_where(PromoCodes.promo_code == input_code)
+    promo_code: PromoCodes = await promo_codes.get_by_where(promo_codes.promo_code == input_code)
 
     if promo_code is None:
         return PromoCodeStatus.NONE, None
