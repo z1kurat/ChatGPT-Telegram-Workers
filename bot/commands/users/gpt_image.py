@@ -11,6 +11,7 @@ from bot.middlewares import RoleMiddleware, BalanceMiddleware
 from bot.parameters.bot_parameters import PARSE_MODE
 from bot.parameters.responses_template import START_RESPONSE, IMAGE_MESSAGE
 from bot.structures.enum.image import OrderImageGenerate
+from bot.utils.gpt import debiting_tokens
 from bot.utils.gpt.get_image_response import get_image_response
 
 user_gpt_image_router = Router()
@@ -42,12 +43,12 @@ async def cmd_image_generate(message: types.Message, user: Users, state: FSMCont
                                            disable_notification=True,
                                            parse_mode=PARSE_MODE)
 
-    success, response, token = await get_image_response(message.text, message.from_user.id)
+    success, response, token = await get_image_response(message.text)
 
     if success:
         await bot.send_photo(chat_id=message.from_user.id,
                              photo=response)
-        user.balance = user.balance - token
+        await debiting_tokens(user, token)
         await state.clear()
 
     if not success:

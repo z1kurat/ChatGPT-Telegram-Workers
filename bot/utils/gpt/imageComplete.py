@@ -7,10 +7,9 @@ from bot.parameters.gpt_parameters import MAX_VALUE_COUNT, TIME_OUT, IMAGE_SIZE,
 from bot.structures.erorrs import TooManyRequests, SomethingWentWrong
 
 
-async def image_complete(prompt: str, user_indicator: int) -> [str, int]:
+async def image_complete(prompt: str) -> [str, int]:
     """
     Getting a response from GPT
-    :param user_indicator: User Telegram ID
     :param prompt: users template
     :return: response and token
     """

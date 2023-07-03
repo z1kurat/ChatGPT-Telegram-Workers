@@ -7,7 +7,8 @@ from bot.filters import ChatTypeFilter
 from bot.middlewares import RoleMiddleware, BalanceMiddleware
 from bot.parameters.bot_parameters import PARSE_MODE
 from bot.parameters.responses_template import START_RESPONSE
-from bot.utils.gpt import get_chat_response
+from bot.structures import Role
+from bot.utils.gpt import get_chat_response, debiting_tokens
 from bot.keyboards.context import reset_context_keyboard, reset_and_replay_keyboard
 
 user_gpt_chat_router = Router()
@@ -31,7 +32,7 @@ async def cmd_gpt(message: types.Message, user: Users, cache: Cache):
     keyboard = reset_and_replay_keyboard
 
     if success:
-        user.balance = user.balance - token
+        await debiting_tokens(user, token)
         keyboard = reset_context_keyboard
 
     await opening_message.delete()

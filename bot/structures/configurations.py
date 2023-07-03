@@ -4,7 +4,6 @@ from dataclasses import dataclass
 
 from os import getenv
 
-from dotenv import load_dotenv
 from sqlalchemy.engine import URL
 
 
@@ -72,8 +71,5 @@ class Configuration:
     bot = BotConfig()
     api = APIConfig()
 
-
-env_path = "/root/GPT/.env"
-load_dotenv(dotenv_path=env_path)
 
 conf = Configuration()
