@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 async def start_bot():
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
         #filename='../bot_history'
     )
