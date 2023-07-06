@@ -12,7 +12,7 @@ from bot.commands.commandName import REPLAY_COMMAND
 from bot.parameters.bot_parameters import PARSE_MODE
 from bot.parameters.responses_template import MESSAGE_RESET_CONTEXT, NONE_LAST_MESSAGE, START_RESPONSE
 from bot.commands.commandName import RESET_COMMAND
-from bot.utils.gpt.get_chat_response import get_chat_response
+from bot.utils.gpt.get_chat_response import get_chat_response_from_user
 
 user_context_router = Router()
 
@@ -38,7 +38,9 @@ async def replay(message: Union[types.Message, types.CallbackQuery], bot: Bot, u
                                              parse_mode=PARSE_MODE)
 
     last_message = binary_last_message.decode()
-    success, response, token = await get_chat_response(user_id=message.from_user.id, message=last_message, cache=cache)
+    success, response, token = await get_chat_response_from_user(user_id=message.from_user.id,
+                                                                 message=last_message,
+                                                                 cache=cache)
     keyboard = reset_and_replay_keyboard
 
     if success:

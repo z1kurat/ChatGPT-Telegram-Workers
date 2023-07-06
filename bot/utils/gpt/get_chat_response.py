@@ -9,22 +9,31 @@ from bot.structures.erorrs import TooManyRequests, SomethingWentWrong
 from bot.utils.gpt import chat_complete
 
 
-async def get_chat_response(user_id: int, message: str, cache: Cache) -> [bool, str, int]:
-    """ Processing GPT text queries """
+async def get_chat_response_from_user(user_id: int, message: str, cache: Cache) -> [bool, str, int]:
+    """ Processing GPT text queries from user """
     radis_key = f"last_message_{user_id}"
     await cache.misc_client.set(radis_key, message)
 
     user_dialog = await get_user_messages(message, user_id, cache)
+    success, response, token = await get_chat_response(user_dialog)
 
+    if not success:
+        return success, response, token
+
+    user_dialog.append({"role": "assistant", "content": response})
+    await cache.user_client.set(user_id, json.dumps(user_dialog))
+
+    return success, response, token
+
+
+async def get_chat_response(user_dialog: [typing.Dict[str, str]]) -> [bool, str, int]:
+    """ Processing GPT text queries """
     try:
         response, token = await chat_complete(user_dialog)
     except TooManyRequests:
         return False, TOO_FAST_RESPONSE_MESSAGE, None
     except SomethingWentWrong:
         return False, ERROR_RESPONSE_MESSAGE, None
-
-    user_dialog.append({"role": "assistant", "content": response})
-    await cache.user_client.set(user_id, json.dumps(user_dialog))
 
     return True, response, token
 

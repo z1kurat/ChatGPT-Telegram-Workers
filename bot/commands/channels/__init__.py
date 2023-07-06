@@ -1,6 +1,6 @@
 from aiogram import Router
 
-from bot.middlewares import ThrottlingMiddleware, UserMiddleware, DatabaseMiddleware, RoleMiddleware
+from bot.middlewares import UserMiddleware, DatabaseMiddleware, RoleMiddleware
 
 from .post_comment import comment_router
 from ...middlewares.administrators import AdministratorsMiddleware
