@@ -16,11 +16,10 @@ from bot.structures.erorrs import TooManyRequests, SomethingWentWrong
 from bot.utils.gpt import chatComplete
 
 comment_router = Router(name='Channel')
-comment_router.message.middleware(EndOfRequestsMiddleware())
 
 
 @comment_router.message(
-    ChatTypeFilter(chat_type=[ChatType.CHANNEL]),
+    ChatTypeFilter(chat_type=[ChatType.SUPERGROUP]),
     Command(COMMENT_COMMAND))
 async def comment_gpt(message: types.Message, command: CommandObject):
     arguments = html.quote(command.args)

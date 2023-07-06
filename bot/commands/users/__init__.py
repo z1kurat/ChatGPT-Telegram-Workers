@@ -1,3 +1,5 @@
+from os import getenv
+
 from aiogram import Router
 
 from .gpt_chat import user_gpt_chat_router
@@ -9,13 +11,20 @@ from .profile import user_profile_router
 from .gpt_image import user_gpt_image_router
 from .promo_code import user_promo_code_router
 
-from bot.middlewares import DatabaseMiddleware, UserMiddleware
+from bot.middlewares import DatabaseMiddleware, UserMiddleware, SubscribersMiddleware
+from ...middlewares.registrations import RegistrationsMiddleware
 
 user_router = Router(name="User")
 
+user_router.message.outer_middleware(SubscribersMiddleware(int(getenv("CHANNEL_ID"))))
+
+user_router.message.middleware(RegistrationsMiddleware())
 user_router.message.middleware(DatabaseMiddleware())
 user_router.message.middleware(UserMiddleware())
 
+user_router.callback_query.outer_middleware(SubscribersMiddleware(int(getenv("CHANNEL_ID"))))
+
+user_router.callback_query.middleware(RegistrationsMiddleware())
 user_router.callback_query.middleware(DatabaseMiddleware())
 user_router.callback_query.middleware(UserMiddleware())
 

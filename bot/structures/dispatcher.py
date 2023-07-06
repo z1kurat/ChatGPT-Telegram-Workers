@@ -11,9 +11,8 @@ from aiogram.utils.chat_action import ChatActionMiddleware
 
 from aioredis import Redis
 
-from bot.middlewares import ThrottlingMiddleware, SubscribersMiddleware, EndOfRequestsMiddleware
+from bot.middlewares import ThrottlingMiddleware, EndOfRequestsMiddleware
 from bot.middlewares.callback_anwser import CallbackAnswerMiddleware
-from bot.middlewares.registrations import RegistrationsMiddleware
 from bot.structures import conf
 from bot.commands import routers
 
@@ -33,16 +32,12 @@ def get_dispatcher(
 
     dp.message.outer_middleware(EndOfRequestsMiddleware())
     dp.message.outer_middleware(ThrottlingMiddleware())
-    dp.message.outer_middleware(SubscribersMiddleware(int(getenv("CHANNEL_ID"))))
 
     dp.callback_query.outer_middleware(EndOfRequestsMiddleware())
     dp.callback_query.outer_middleware(ThrottlingMiddleware())
-    dp.callback_query.outer_middleware(SubscribersMiddleware(int(getenv("CHANNEL_ID"))))
 
     dp.message.middleware(ChatActionMiddleware())
-    dp.message.middleware(RegistrationsMiddleware())
 
-    dp.callback_query.middleware(RegistrationsMiddleware())
     dp.callback_query.middleware(CallbackAnswerMiddleware())
 
     for router in routers:
