@@ -1,4 +1,4 @@
-from aiogram import types, Router, flags
+from aiogram import types, Router
 from aiogram.enums import ChatType
 from aiogram.filters import CommandObject, Command
 
@@ -11,7 +11,7 @@ from bot.middlewares.end_of_requests import EndOfRequestsMiddleware
 
 from bot.parameters.gpt_parameters import DEFAULT_POST_MOD
 from bot.parameters.responses_template import ERROR_RESPONSE_MESSAGE, EMPTY_ARGUMENTS_COMMAND, TOO_FAST_RESPONSE_MESSAGE
-from bot.structures import TooManyRequests, SomethingWentWrong
+from bot.structures.erorrs import TooManyRequests, SomethingWentWrong
 
 from bot.utils.gpt import chatComplete
 
