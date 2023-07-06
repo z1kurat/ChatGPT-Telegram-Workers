@@ -32,7 +32,7 @@ async def comment_gpt(message: types.Message, command: CommandObject):
         return
 
     user_messages = [{"role": "system", "content": DEFAULT_POST_MOD},
-                     {"role": "users", "content": arguments}]
+                     {"role": "user", "content": arguments}]
 
     try:
         response = await chatComplete.chat_complete(user_messages)
