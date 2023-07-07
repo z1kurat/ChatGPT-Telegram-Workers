@@ -7,30 +7,6 @@ from bot.structures import conf
 KeyLike = TypeVar("KeyLike", str, int)
 
 
-def build_redis_client(
-        host: str,
-        db: str,
-        port: int,
-        password: str,
-        username: str,
-) -> Redis:
-    """Build redis client
-    :param username: username
-    :param port: port database
-    :param db: number database
-    :param host: host database
-    :type password: password database
-    """
-    client = Redis(
-        host=host,
-        db=db,
-        port=port,
-        password=password,
-        username=username,
-    )
-    return client
-
-
 class Adapter:
     """Cache adapter"""
     def __init__(self,
@@ -39,7 +15,31 @@ class Adapter:
                  port: int,
                  password: str,
                  username: str):
-        self.client = build_redis_client(host, db, port, password, username)
+        self.client = self.build_redis_client(host, db, port, password, username)
+
+    @staticmethod
+    def build_redis_client(
+            host: str,
+            db: str,
+            port: int,
+            password: str,
+            username: str,
+    ) -> Redis:
+        """Build redis client
+        :param username: username
+        :param port: port database
+        :param db: number database
+        :param host: host database
+        :type password: password database
+        """
+        client = Redis(
+            host=host,
+            db=db,
+            port=port,
+            password=password,
+            username=username,
+        )
+        return client
 
     @property
     def redis_client(self) -> Redis:

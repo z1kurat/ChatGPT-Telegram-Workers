@@ -1,6 +1,6 @@
 from bot.parameters.responses_template import TOO_FAST_RESPONSE_MESSAGE, ERROR_RESPONSE_MESSAGE
 from bot.structures.erorrs import TooManyRequests, SomethingWentWrong
-from bot.utils.gpt.imageComplete import image_complete
+from bot.utils.gpt.image_complete import image_complete
 
 
 async def get_image_response(prompt: str) -> [bool, str, int]:
