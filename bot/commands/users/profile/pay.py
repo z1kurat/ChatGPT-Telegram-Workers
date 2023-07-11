@@ -25,5 +25,4 @@ async def processing_pay(message: types.Message, user: Users):
         token = 10000
 
     user.balance += token
-    await message.answer(text=SUCCESSFUL_PAY.format(token),
-                         parse_mode=PARSE_MODE)
+    await message.answer(text=SUCCESSFUL_PAY.format(token))
