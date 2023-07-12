@@ -1,5 +1,3 @@
-from os import getenv
-
 from typing import Optional
 
 from aiogram import Dispatcher

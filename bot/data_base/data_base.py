@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 
 from bot.structures import conf
 
-from .repositories import UserRepo, PromoCodeRepo, UsedPromoCodeRepo
+from .repositories import UserRepo, PromoCodeRepo, UsedPromoCodeRepo, SubscribersRepo
 
 
 def create_async_engine(url: Union[URL, str]) -> AsyncEngine:
@@ -44,16 +44,19 @@ class Database:
     """ Promo code repository """
     used_promo_codes: UsedPromoCodeRepo
     """ Used promo code repository """
+    subscribers: SubscribersRepo
 
     session: AsyncSession
 
     def __init__(
         self, session: AsyncSession,
-            user: UserRepo = None,
-            promo_code: PromoCodeRepo = None,
-            used_pomo_code: UsedPromoCodeRepo = None,
+            users: UserRepo = None,
+            promo_codes: PromoCodeRepo = None,
+            used_pomo_codes: UsedPromoCodeRepo = None,
+            subscribers: SubscribersRepo = None,
     ):
         self.session = session
-        self.users = user or UserRepo(session=session)
-        self.promo_codes = promo_code or PromoCodeRepo(session=session)
-        self.used_promo_codes = used_pomo_code or UsedPromoCodeRepo(session=session)
+        self.users = users or UserRepo(session=session)
+        self.promo_codes = promo_codes or PromoCodeRepo(session=session)
+        self.used_promo_codes = used_pomo_codes or UsedPromoCodeRepo(session=session)
+        self.subscribers = subscribers or SubscribersRepo(session=session)
