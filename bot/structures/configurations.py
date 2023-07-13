@@ -50,7 +50,7 @@ class RedisConfig:
 @dataclass
 class BotConfig:
     """Bot configuration"""
-    token: str = getenv("TELEGRAM_BOT_TOKEN_TEMP")
+    token: str = getenv("TELEGRAM_BOT_TOKEN")
 
 
 @dataclass
