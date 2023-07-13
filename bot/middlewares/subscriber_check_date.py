@@ -24,7 +24,10 @@ class SubscriberCheckDateMiddleware(BaseMiddleware):
 
         subscriber: Subscribers = data.get("subscriber")
 
-        if subscriber.subscription_end_date < datetime.datetime.now():
+        if not subscriber:
+            return await handler(event, data)
+
+        if subscriber.subscription_end_date < datetime.date.today():
             user: Users = data.get("user")
             user.role = Role.USER
 
