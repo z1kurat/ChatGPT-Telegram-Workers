@@ -5,6 +5,7 @@ from bot.cache import Cache
 from bot.data_base.models import Users
 from bot.filters import ChatTypeFilter
 from bot.middlewares import RoleMiddleware, BalanceMiddleware
+from bot.middlewares.subscriber_check_date import SubscriberCheckDateMiddleware
 from bot.parameters.bot_parameters import PARSE_MODE
 from bot.parameters.responses_template import START_RESPONSE
 from bot.utils.gpt import get_chat_response_from_user, debiting_tokens
@@ -13,6 +14,7 @@ from bot.keyboards.context import reset_context_keyboard, reset_and_replay_keybo
 user_gpt_chat_router = Router()
 
 user_gpt_chat_router.message.middleware(RoleMiddleware())
+user_gpt_chat_router.message.middleware(SubscriberCheckDateMiddleware())
 user_gpt_chat_router.message.middleware(BalanceMiddleware())
 
 

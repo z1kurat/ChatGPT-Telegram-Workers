@@ -8,10 +8,11 @@ from .context import user_context_router
 from .cancel import user_cancel_router
 from .gpt_image import user_gpt_image_router
 from .profile import user_profile_router, user_referral_router, user_promo_code_router, user_token_router, \
-    user_pay_router
+    user_pay_router, user_subscription_router
 
 from bot.middlewares import DatabaseMiddleware, UserMiddleware, SubscribersMiddleware
 from ...middlewares.registrations import RegistrationsMiddleware
+from ...middlewares.subscriber import SubscriberMiddleware
 
 user_router = Router(name="User")
 
@@ -20,13 +21,15 @@ user_router.message.outer_middleware(SubscribersMiddleware(int(getenv("CHANNEL_I
 user_router.message.middleware(RegistrationsMiddleware())
 user_router.message.middleware(DatabaseMiddleware())
 user_router.message.middleware(UserMiddleware())
+user_router.message.middleware(SubscriberMiddleware())
 
 user_router.callback_query.outer_middleware(SubscribersMiddleware(int(getenv("CHANNEL_ID"))))
 
 user_router.callback_query.middleware(RegistrationsMiddleware())
 user_router.callback_query.middleware(DatabaseMiddleware())
 user_router.callback_query.middleware(UserMiddleware())
+user_router.callback_query.middleware(SubscriberMiddleware())
 
 user_router.include_routers(user_start_router, user_context_router, user_cancel_router, user_referral_router,
-                            user_profile_router, user_gpt_image_router, user_pay_router, user_token_router,
-                            user_promo_code_router, user_gpt_chat_router)
+                            user_profile_router, user_gpt_image_router, user_pay_router, user_subscription_router,
+                            user_token_router, user_promo_code_router, user_gpt_chat_router)

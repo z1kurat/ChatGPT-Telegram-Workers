@@ -8,6 +8,7 @@ from bot.data_base.models import Users
 from bot.filters import ChatTypeFilter
 from bot.keyboards.misc import cancel_keyboard
 from bot.middlewares import RoleMiddleware, BalanceMiddleware
+from bot.middlewares.subscriber_check_date import SubscriberCheckDateMiddleware
 from bot.parameters.bot_parameters import PARSE_MODE
 from bot.parameters.responses_template import START_RESPONSE, IMAGE_MESSAGE
 from bot.structures.enum.image import OrderImageGenerate
@@ -17,6 +18,7 @@ from bot.utils.gpt.get_image_response import get_image_response
 user_gpt_image_router = Router()
 
 user_gpt_image_router.message.middleware(RoleMiddleware())
+user_gpt_image_router.message.middleware(SubscriberCheckDateMiddleware())
 user_gpt_image_router.message.middleware(BalanceMiddleware())
 
 

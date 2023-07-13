@@ -38,3 +38,6 @@ SETTINGS_COMMAND = 'settings_command'
 
 SUBSCRIPTION_MENU = 'subscription_menu'
 SUBSCRIPTION_COMMAND = 'subscription_command'
+SUBSCRIPTION_1 = 'buy_subscription_1'
+SUBSCRIPTION_3 = 'buy_subscription_3'
+SUBSCRIPTION_6 = 'buy_subscription_6'
