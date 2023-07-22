@@ -1,4 +1,5 @@
 import abc
+
 from typing import Generic, List, Type, TypeVar, Union
 
 from sqlalchemy import delete, select
