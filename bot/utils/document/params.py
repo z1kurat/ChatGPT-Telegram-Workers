@@ -8,5 +8,5 @@ API_KEY = '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'
 
 TG_TOKEN = '5915078359:AAFD49rJggKWjdzJaM9UKVxXyDO5KC2ZX-U'
 
-INPUT_FILE_PATH = "INPUT_DOCS\input_file{}.txt"
-OUTPUT_FILE_PATH = 'OUTPUT_DOCS\output_file{}.docx'
+INPUT_FILE_PATH = r"D:\Backup\Users\novor\PycharmProjects\GPT\GPT\bot\INPUT_DOCS\input_file{}.txt"
+OUTPUT_FILE_PATH = r'D:\Backup\Users\novor\PycharmProjects\GPT\GPT\bot\OUTPUT_DOCS\output_file{}.docx'

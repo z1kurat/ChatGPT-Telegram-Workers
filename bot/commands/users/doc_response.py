@@ -1,5 +1,6 @@
-from aiogram import types, Router, F
+from aiogram import types, Router, F, Bot
 from aiogram.enums import ChatType
+from aiogram.types import InputFile, FSInputFile
 
 from bot.cache import Cache
 from bot.data_base.models import Users
@@ -7,6 +8,7 @@ from bot.filters import ChatTypeFilter
 from bot.middlewares import RoleMiddleware, BalanceMiddleware
 from bot.middlewares.subscriber_check_date import SubscriberCheckDateMiddleware
 from bot.parameters.bot_parameters import PARSE_MODE
+from bot.parameters.gpt_parameters import DEFAULT_PROMPT
 from bot.parameters.responses_template import START_RESPONSE
 from bot.utils.gpt import get_chat_response, debiting_tokens
 from bot.keyboards.context import reset_context_keyboard, reset_and_replay_keyboard
@@ -25,7 +27,7 @@ user_doc_response_router.message.middleware(BalanceMiddleware())
     ChatTypeFilter(chat_type=[ChatType.PRIVATE]),
     F.document,
     flags={"chat_action": "typing"})
-async def cmd_gpt(message: types.Document, user: Users):
+async def cmd_gpt(message: types.Message, user: Users, bot: Bot):
     """ Processing GPT text queries """
     opening_message = await message.answer(START_RESPONSE.format(user.balance),
                                            disable_notification=True,
@@ -34,34 +36,37 @@ async def cmd_gpt(message: types.Document, user: Users):
     keyboard = reset_and_replay_keyboard
 
     # print(f'User {message.chat.id} started downloading file...')
-    await message.document.download(destination_file = INPUT_FILE_PATH.format(message.chat.id))
+    file = await bot.get_file(message.document.file_id)
+    await bot.download_file(file.file_path, INPUT_FILE_PATH.format(message.chat.id))
     # print("File was downloaded...")
 
-    getting_file = Reader(r"INPUT_DOCS\input_file.txt")
+    getting_file = Reader(INPUT_FILE_PATH.format(message.chat.id))
     data = getting_file.data
     document = Document()
 
     message_start = await message.answer(START_RESPONSE.format(getting_file.time_waiting))
 
     for question in data:
-        success, response, token = await get_chat_response(user_id=message.from_user.id,
-                                                            message=message.text)
+        user_history = [{"role": "system", "content": DEFAULT_PROMPT},
+                        {"role": "user", "content": question}]
+        success, response, token = await get_chat_response(user_dialog=user_history)
         if success:
             document.filling(question=question, answer=response)
             user.balance -= token
             # break
 
     document.saving(message.chat.id)
+    try:
+        await bot.send_document(chat_id=message.chat.id,
+                                document=FSInputFile(OUTPUT_FILE_PATH.format(message.chat.id)),
+                                caption='ne lox')
+    except Exception as e:
+        pass
 
-    # await message.reply(f"Файл получен, примерное время ожидения: {main_process.time_waiting} минут...")
-    with open(OUTPUT_FILE_PATH.format(message.chat.id), 'rb') as file:
-        await message.reply_document(file)
-        # print(f'User {message.chat.id} got file...')
-        await message_start.delete()
+    await message_start.delete()
 
     if success:
         await debiting_tokens(user, token)
         keyboard = reset_context_keyboard
 
     await opening_message.delete()
-    await message.answer(response, reply_markup=keyboard)
