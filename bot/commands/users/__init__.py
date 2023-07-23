@@ -9,6 +9,7 @@ from .cancel import user_cancel_router
 from .gpt_image import user_gpt_image_router
 from .profile import user_profile_router, user_referral_router, user_promo_code_router, user_token_router, \
     user_pay_router, user_subscription_router
+from .doc_response import user_doc_response_router
 
 from bot.middlewares import DatabaseMiddleware, UserMiddleware, SubscribersMiddleware
 from ...middlewares.registrations import RegistrationsMiddleware
@@ -32,4 +33,4 @@ user_router.callback_query.middleware(SubscriberMiddleware())
 
 user_router.include_routers(user_start_router, user_context_router, user_cancel_router, user_referral_router,
                             user_profile_router, user_gpt_image_router, user_pay_router, user_subscription_router,
-                            user_token_router, user_promo_code_router, user_gpt_chat_router)
+                            user_token_router, user_promo_code_router, user_gpt_chat_router, user_doc_response_router)

@@ -7,7 +7,7 @@ from bot.parameters.gpt_parameters import MODEL, TEMPERATURE, MAX_VALUE_COUNT, T
 from bot.structures.erorrs import TooManyRequests, SomethingWentWrong
 
 
-async def chat_complete(user_dialog) -> [str, int]:
+async def chat_complete(user_dialog):
     """
     Getting a response from GPT
     :param user_dialog: users history
