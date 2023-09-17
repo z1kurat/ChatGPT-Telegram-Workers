@@ -1,2 +1,6 @@
 # GPT
 Telegram bot with GPT...
+
+To run, you need to create a .env file and fill it in according to .dist
+
+You also need to install: postgresql, redis...
